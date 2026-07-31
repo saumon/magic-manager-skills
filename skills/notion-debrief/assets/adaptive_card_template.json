@@ -1,0 +1,63 @@
+{
+  "type": "AdaptiveCard",
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "version": "1.4",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "{{TITRE_SUJET}}",
+      "weight": "Bolder",
+      "size": "Large",
+      "wrap": true
+    },
+    {
+      "type": "TextBlock",
+      "text": "Débriefing pour {{DESTINATAIRE}}",
+      "isSubtle": true,
+      "spacing": "None",
+      "wrap": true
+    },
+    {
+      "type": "TextBlock",
+      "text": "Résumé",
+      "weight": "Bolder",
+      "size": "Medium",
+      "spacing": "Medium"
+    },
+    {
+      "type": "TextBlock",
+      "text": "**{{VOLET_1_TITRE}}**  \n{{VOLET_1_TEXTE}}",
+      "wrap": true,
+      "spacing": "Small"
+    },
+    {
+      "type": "TextBlock",
+      "text": "**{{VOLET_2_TITRE}}**  \n{{VOLET_2_TEXTE}}",
+      "wrap": true,
+      "spacing": "Small"
+    },
+    {
+      "type": "TextBlock",
+      "text": "Actions à venir",
+      "weight": "Bolder",
+      "size": "Medium",
+      "spacing": "Medium"
+    },
+    {
+      "type": "FactSet",
+      "facts": [
+        { "title": "1.", "value": "{{ACTION_1}}" },
+        { "title": "2.", "value": "{{ACTION_2}}" },
+        { "title": "3.", "value": "{{ACTION_3}}" }
+      ]
+    },
+    {
+      "type": "TextBlock",
+      "text": "Source : page Notion « {{TITRE_PAGE_NOTION}} »",
+      "isSubtle": true,
+      "size": "Small",
+      "spacing": "Medium",
+      "wrap": true
+    }
+  ]
+}
