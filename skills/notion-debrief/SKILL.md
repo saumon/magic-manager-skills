@@ -3,7 +3,7 @@ name: notion-debrief
 description: Résume une page Notion et envoie un débriefing (carte adaptive) à un destinataire via Microsoft Teams. Déclencher ce skill dès que l'utilisateur demande de "résumer une page Notion et l'envoyer à quelqu'un", de "faire un débriefing" à partir de Notion, ou toute variante de "prépare/envoie un résumé de cette page Notion à X". Nécessite les MCP Notion et Kommunicator déjà configurés (lecture Notion + envoi Teams).
 license: MIT
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
   author: "magic-manager-skills"
   last-updated: "2026-08-03"
   repository: "https://github.com/saumon/magic-manager-skills"
@@ -75,16 +75,36 @@ mentionnée dans la page) sans confirmation explicite.
 
 Convertir le résumé validé en carte adaptive (Adaptive Card JSON, schema 1.4) avec cette
 structure type :
-- Titre (nom du sujet/de la page)
-- Sous-titre "Débriefing pour {destinataire}"
-- Section "Résumé" : un `TextBlock` par volet/thème, en gras pour le titre du volet
-- Section "Actions à venir" : un `FactSet` numéroté
+- En-tête : `Container` `style: emphasis` contenant le titre (nom du sujet/de la page) et
+  le sous-titre "Débriefing pour {destinataire}"
+- Section "Résumé" : pour **chaque** volet/thème, deux blocs :
+  1. un `TextBlock` titre de volet (`weight: Bolder`, `color: Accent`)
+  2. un `TextBlock` contenant la liste à puces des points du volet
+- Section "Actions" : deux sous-blocs distincts, "Fait" (`color: Good`) et "À faire"
+  (`color: Attention`), chacun suivi d'un `TextBlock` en liste à puces. Ne pas utiliser de
+  `FactSet` : il écrase la numérotation dans une colonne étroite et fait perdre la
+  distinction fait / à faire.
 - Une mention textuelle de la source ("Source : page Notion « {{TITRE_PAGE_NOTION}} »"),
   **sans jamais inclure l'URL de la page** : ni bouton `Action.OpenUrl`, ni lien dans un
   `TextBlock`. Le message Teams ne doit contenir aucune URL Notion.
 
-Voir `assets/adaptive_card_template.json` pour un exemple concret à adapter (structure
-utilisée avec succès précédemment).
+Voir `assets/adaptive_card_template.json` pour la structure de référence à adapter. Le
+template ne montre que 2 volets et 3 puces : dupliquer ou réduire les blocs selon le
+contenu réel, ne pas tronquer le résumé pour rentrer dans le template.
+
+**Règles de rendu Teams (sinon la carte perd la mise en forme du résumé du chat) :**
+- Les puces s'écrivent dans un seul `TextBlock` avec des items `- ` séparés par `\r`
+  (retour chariot). `\n` seul ou `  \n` ne produit pas de liste fiable dans Teams : les
+  puces disparaissent et tout est aplati en un paragraphe.
+- Toujours `"wrap": true` sur les `TextBlock` de contenu.
+- Markdown supporté et à utiliser : `**gras**` et `_italique_` à l'intérieur des puces
+  (ex : mettre en gras les références/identifiants). Le reste (tableaux, titres `#`,
+  listes imbriquées, liens markdown) n'est pas rendu correctement : ne pas s'en servir.
+- Une puce = une information du résumé validé. Ne pas fusionner plusieurs puces en une
+  phrase longue : la carte doit refléter la même granularité que le résumé relu à
+  l'étape 4 (mêmes dates, mêmes références, même découpage).
+- Utiliser `separator: true` entre les grandes sections pour garder la hiérarchie
+  visuelle.
 
 ### 7. Envoyer via Kommunicator
 
@@ -116,3 +136,6 @@ sans reformuler tout le contenu déjà envoyé.
   ni le destinataire, ni déclencher un envoi.
 - Ne jamais inclure l'URL de la page Notion dans la carte adaptive envoyée via Teams
   (ni bouton `Action.OpenUrl`, ni lien texte) : seul le titre de la page peut être cité.
+- La carte doit être fidèle au résumé validé à l'étape 4 : mêmes volets, mêmes puces,
+  mêmes dates et références. Si un point est volontairement exclu (donnée sensible,
+  montant à ne pas diffuser), le dire explicitement à l'utilisateur avant l'envoi.

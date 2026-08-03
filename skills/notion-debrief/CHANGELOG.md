@@ -4,6 +4,26 @@ Toutes les versions notables de ce skill sont documentées ici. Le format
 suit [Keep a Changelog](https://keepachangelog.com/), et le versionnement
 suit [semver](https://semver.org/) (MAJOR.MINOR.PATCH).
 
+## [1.3.0] - 2026-08-03
+
+### Modifié
+
+- Refonte du template de carte adaptive : listes à puces réelles (items `- `
+  séparés par `\r`), en-tête en `Container` `style: emphasis`, titres de volet
+  colorés, séparateurs entre sections.
+- La section « Actions à venir » (`FactSet` numéroté) devient « Actions »
+  scindée en « Fait » et « À faire » : le `FactSet` écrasait la numérotation
+  et faisait perdre la distinction fait / à faire présente dans le résumé.
+
+### Ajouté
+
+- Règles de rendu Teams dans l'étape 6 : séparateur `\r` pour les puces,
+  `wrap: true` obligatoire, markdown limité à `**gras**` / `_italique_`,
+  une puce = une information (pas de fusion en paragraphe).
+- Point de vigilance : la carte doit rester fidèle au résumé validé à
+  l'étape 4, et toute omission volontaire (donnée sensible) doit être
+  signalée à l'utilisateur avant l'envoi.
+
 ## [1.2.0] - 2026-08-03
 
 ### Ajouté

@@ -6,6 +6,8 @@ de skills). L'historique détaillé de chaque skill vit dans son propre
 
 ## 2026-08-03
 
+- `notion-debrief` passe en v1.3.0 : refonte du template de carte adaptive
+  (puces réellement rendues dans Teams, actions scindées en « Fait » / « À faire »).
 - Ajout du fichier `LICENSE` (MIT), cohérent avec le champ `license`
   déclaré dans les `SKILL.md`.
 - `notion-debrief` passe en v1.2.0. Le tag `notion-debrief-v1.1.0` avait été
