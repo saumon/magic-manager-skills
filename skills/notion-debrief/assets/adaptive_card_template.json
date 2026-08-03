@@ -4,52 +4,97 @@
   "version": "1.4",
   "body": [
     {
-      "type": "TextBlock",
-      "text": "{{TITRE_SUJET}}",
-      "weight": "Bolder",
-      "size": "Large",
-      "wrap": true
-    },
-    {
-      "type": "TextBlock",
-      "text": "Débriefing pour {{DESTINATAIRE}}",
-      "isSubtle": true,
-      "spacing": "None",
-      "wrap": true
+      "type": "Container",
+      "style": "emphasis",
+      "bleed": true,
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "{{TITRE_SUJET}}",
+          "weight": "Bolder",
+          "size": "Large",
+          "wrap": true
+        },
+        {
+          "type": "TextBlock",
+          "text": "Débriefing pour {{DESTINATAIRE}}",
+          "isSubtle": true,
+          "spacing": "None",
+          "wrap": true
+        }
+      ]
     },
     {
       "type": "TextBlock",
       "text": "Résumé",
       "weight": "Bolder",
       "size": "Medium",
-      "spacing": "Medium"
+      "spacing": "Medium",
+      "separator": true
     },
     {
       "type": "TextBlock",
-      "text": "**{{VOLET_1_TITRE}}**  \n{{VOLET_1_TEXTE}}",
+      "text": "{{VOLET_1_TITRE}}",
+      "weight": "Bolder",
+      "color": "Accent",
+      "spacing": "Medium",
+      "wrap": true
+    },
+    {
+      "type": "TextBlock",
+      "text": "- {{VOLET_1_PUCE_1}}\r- {{VOLET_1_PUCE_2}}\r- {{VOLET_1_PUCE_3}}",
       "wrap": true,
       "spacing": "Small"
     },
     {
       "type": "TextBlock",
-      "text": "**{{VOLET_2_TITRE}}**  \n{{VOLET_2_TEXTE}}",
+      "text": "{{VOLET_2_TITRE}}",
+      "weight": "Bolder",
+      "color": "Accent",
+      "spacing": "Medium",
+      "wrap": true
+    },
+    {
+      "type": "TextBlock",
+      "text": "- {{VOLET_2_PUCE_1}}\r- {{VOLET_2_PUCE_2}}",
       "wrap": true,
       "spacing": "Small"
     },
     {
       "type": "TextBlock",
-      "text": "Actions à venir",
+      "text": "Actions",
       "weight": "Bolder",
       "size": "Medium",
-      "spacing": "Medium"
+      "spacing": "Medium",
+      "separator": true
     },
     {
-      "type": "FactSet",
-      "facts": [
-        { "title": "1.", "value": "{{ACTION_1}}" },
-        { "title": "2.", "value": "{{ACTION_2}}" },
-        { "title": "3.", "value": "{{ACTION_3}}" }
-      ]
+      "type": "TextBlock",
+      "text": "Fait",
+      "weight": "Bolder",
+      "color": "Good",
+      "spacing": "Small",
+      "wrap": true
+    },
+    {
+      "type": "TextBlock",
+      "text": "- {{FAIT_1}}\r- {{FAIT_2}}\r- {{FAIT_3}}",
+      "wrap": true,
+      "spacing": "Small"
+    },
+    {
+      "type": "TextBlock",
+      "text": "À faire",
+      "weight": "Bolder",
+      "color": "Attention",
+      "spacing": "Medium",
+      "wrap": true
+    },
+    {
+      "type": "TextBlock",
+      "text": "- {{A_FAIRE_1}}\r- {{A_FAIRE_2}}\r- {{A_FAIRE_3}}",
+      "wrap": true,
+      "spacing": "Small"
     },
     {
       "type": "TextBlock",
@@ -57,6 +102,7 @@
       "isSubtle": true,
       "size": "Small",
       "spacing": "Medium",
+      "separator": true,
       "wrap": true
     }
   ]
