@@ -9,6 +9,7 @@ Mono-repo de skills Claude pour l'automatisation de tâches de management
 magic-manager-skills/
 ├── README.md
 ├── CHANGELOG.md
+├── LICENSE
 ├── .gitignore
 └── skills/
     └── notion-debrief/
@@ -23,14 +24,29 @@ Chaque skill vit dans son propre sous-dossier sous `skills/`, avec son
 
 ## Installation d'un skill
 
+### Claude Code (application desktop)
+
+1. Zipper le dossier du skill voulu, en gardant le dossier lui-même à la
+   racine de l'archive :
+
+   ```bash
+   cd skills && zip -r notion-debrief.zip notion-debrief
+   ```
+
+2. Dans Claude, aller dans **Compétences → Gérer les compétences**, puis
+   ajouter le skill en important le `.zip` généré.
+
+Les archives `*.zip` produites dans `skills/` sont ignorées par Git.
+
+### Autres environnements
+
 Copier le contenu de `skills/<nom-du-skill>/` dans le dossier de skills de
-Claude (`/mnt/skills/user/` sur Claude.ai, ou l'équivalent Claude Code /
-Cowork), ou importer le fichier `.skill` packagé directement depuis
-l'interface Claude.
+Claude (`/mnt/skills/user/` sur Claude.ai, ou l'équivalent Cowork), ou
+importer le fichier `.skill` packagé directement depuis l'interface Claude.
 
 ## Skills disponibles
 
-### notion-debrief — v1.0.0
+### notion-debrief — v1.2.0
 
 Résume une page Notion et envoie un débriefing (carte adaptive) à un
 destinataire via Microsoft Teams. Nécessite les MCP Notion et Kommunicator.
