@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>magic-manager-skills — Des skills Claude pour Engineering Managers</title>
+<meta name="description" content="Mono-repo open source de skills Claude pour l'automatisation de tâches de management : débriefing Notion vers Teams, tri de CV. Pensé pour une stack Microsoft Teams (MCP Kommunicator) et Notion.">
+<meta name="theme-color" content="#0b0e14">
+<meta name="color-scheme" content="dark">
+<meta property="og:type" content="website">
+<meta property="og:title" content="magic-manager-skills — Des skills Claude pour Engineering Managers">
+<meta property="og:description" content="Des workflows de management transformés en skills Claude versionnés : débriefing Notion vers Teams, tri de CV. Open source, licence MIT.">
+<meta property="og:url" content="https://saumon.github.io/magic-manager-skills/">
+<meta property="og:image" content="https://saumon.github.io/magic-manager-skills/assets/images/magicmanagerskills-logo.png">
+<meta property="og:image:alt" content="Logo magic-manager-skills : un magicien à lunettes, baguette dans une main et ordinateur portable dans l'autre">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0e14'/%3E%3Cpath d='M9 22V10l7 8 7-8v12' fill='none' stroke='%237c8cff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root {
+  --bg: #0b0e14;
+  --surface: #12161f;
+  --surface-2: #171c27;
+  --border: #232a38;
+  --text: #e8ecf5;
+  --muted: #9aa5bd;
+  --accent: #7c8cff;
+  --accent-2: #4fd1c5;
+  --radius: 14px;
+  --max-width: 1120px;
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Halos décoratifs du fond, hors flux pour ne jamais créer de scroll horizontal */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(60rem 40rem at 15% -10%, rgba(124, 140, 255, .18), transparent 60%),
+    radial-gradient(45rem 35rem at 95% 5%, rgba(79, 209, 197, .12), transparent 60%);
+  pointer-events: none;
+}
+
+/* Étoiles de magicien, générées en JS et neutralisées si l'utilisateur refuse les animations */
+.stars {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.stars i {
+  position: absolute;
+  display: block;
+  background: currentColor;
+  clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%);
+  filter: drop-shadow(0 0 8px currentColor) drop-shadow(0 0 20px rgba(255, 199, 44, .55));
+  opacity: 0;
+  animation: twinkle var(--dur) ease-in-out var(--delay) infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0; transform: scale(.3) rotate(0deg); }
+  7% { opacity: var(--peak); transform: scale(1) rotate(25deg); }
+  18% { opacity: 0; transform: scale(.3) rotate(50deg); }
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+h1, h2, h3 { line-height: 1.2; margin: 0 0 .6em; letter-spacing: -.02em; }
+h1 { font-size: clamp(2.1rem, 6vw, 3.6rem); }
+h2 { font-size: clamp(1.6rem, 4vw, 2.3rem); }
+h3 { font-size: 1.15rem; }
+p { margin: 0 0 1.1em; }
+
+code, pre { font-family: var(--mono); font-size: .875rem; }
+
+.wrap {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+}
+.skip:focus {
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  background: var(--surface-2);
+  padding: .6rem 1rem;
+  border-radius: 8px;
+}
+
+/* --- Navigation --- */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(11, 14, 20, .8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav .wrap {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 62px;
+}
+.brand {
+  font-family: var(--mono);
+  font-weight: 600;
+  color: var(--text);
+  font-size: .95rem;
+  white-space: nowrap;
+}
+.brand span { color: var(--accent); }
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  margin-left: auto;
+  font-size: .92rem;
+}
+.nav-links a { color: var(--muted); }
+.nav-links a:hover { color: var(--text); text-decoration: none; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .6rem 1.1rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: .92rem;
+  border: 1px solid var(--border);
+  color: var(--text);
+  white-space: nowrap;
+  transition: transform .15s ease, border-color .15s ease, background .15s ease;
+}
+.btn:hover { text-decoration: none; transform: translateY(-1px); border-color: var(--accent); }
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), #5f6fe8);
+  border-color: transparent;
+  color: #0b0e14;
+}
+.nav .btn { margin-left: auto; }
+.nav-links + .btn { margin-left: 0; }
+
+/* --- Sections --- */
+section { padding: clamp(1.75rem, 4.5vw, 3rem) 0; scroll-margin-top: 70px; }
+.section-tag {
+  font-family: var(--mono);
+  font-size: .78rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  margin: 0 0 .7rem;
+}
+.lead { color: var(--muted); font-size: 1.05rem; max-width: 62ch; }
+
+/* --- Hero --- */
+.hero { padding-top: clamp(1.5rem, 4vw, 2.75rem); }
+.hero .wrap {
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+}
+.hero p.lead { font-size: 1.15rem; }
+.gradient {
+  background: linear-gradient(100deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.badges { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.8rem; padding: 0; list-style: none; }
+.badges li {
+  font-family: var(--mono);
+  font-size: .76rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  background: var(--surface);
+}
+.cta { display: flex; flex-wrap: wrap; gap: .75rem; }
+
+.hero-visual { display: grid; gap: 1rem; min-width: 0; }
+/* Halo clair : le logo est transparent et majoritairement sombre */
+.logo-wrap {
+  display: grid;
+  place-items: center;
+  padding: .5rem;
+  border-radius: var(--radius);
+  background: radial-gradient(closest-side, rgba(124, 140, 255, .22), rgba(79, 209, 197, .10) 65%, transparent);
+}
+.logo {
+  display: block;
+  width: 100%;
+  max-width: 440px;
+  height: auto;
+  filter: drop-shadow(0 10px 26px rgba(0, 0, 0, .55));
+}
+
+.terminal {
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .45);
+}
+.terminal-bar {
+  display: flex;
+  gap: .4rem;
+  align-items: center;
+  padding: .7rem .9rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.dot { width: 11px; height: 11px; border-radius: 50%; background: #39415a; }
+.terminal-bar .label { margin-left: .6rem; font-family: var(--mono); font-size: .75rem; color: var(--muted); }
+.terminal pre {
+  margin: 0;
+  padding: 1.1rem;
+  overflow-x: auto;
+  line-height: 1.8;
+  color: var(--muted);
+}
+.terminal .u { color: var(--accent-2); }
+.terminal .k { color: var(--accent); }
+.terminal .ok { color: #6ee7a8; }
+
+/* --- Grilles de cartes --- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+}
+.card {
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  transition: border-color .2s ease, transform .2s ease;
+}
+.card:hover { border-color: rgba(124, 140, 255, .55); transform: translateY(-3px); }
+.card p { color: var(--muted); margin-bottom: 0; }
+.card .icon { font-size: 1.5rem; display: block; margin-bottom: .8rem; }
+
+.skill-card { display: flex; flex-direction: column; }
+.skill-head { display: flex; align-items: baseline; gap: .75rem; flex-wrap: wrap; }
+.skill-head h3 { font-family: var(--mono); margin: 0; }
+.version {
+  font-family: var(--mono);
+  font-size: .75rem;
+  color: var(--accent-2);
+  border: 1px solid rgba(79, 209, 197, .35);
+  border-radius: 999px;
+  padding: .1rem .55rem;
+}
+.tags { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; padding: 0; margin: 1rem 0 0; }
+.tags li {
+  font-size: .74rem;
+  font-family: var(--mono);
+  color: var(--muted);
+  background: var(--surface-2);
+  border-radius: 6px;
+  padding: .2rem .55rem;
+}
+.card-links { margin-top: 1.2rem; display: flex; gap: 1.1rem; font-size: .88rem; }
+
+/* --- Étapes d'installation --- */
+.steps { counter-reset: step; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; margin-top: 2.5rem; }
+.step {
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.5rem 1.5rem 4rem;
+  position: relative;
+}
+.step::before {
+  counter-increment: step;
+  content: counter(step);
+  position: absolute;
+  left: 1.4rem;
+  top: 1.45rem;
+  width: 1.8rem;
+  height: 1.8rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: .82rem;
+}
+.step h3 { margin-bottom: .4rem; }
+.step p { color: var(--muted); margin-bottom: 0; }
+.step pre {
+  margin: .9rem 0 0;
+  padding: .85rem 1rem;
+  background: #090c12;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow-x: auto;
+  color: var(--accent-2);
+}
+
+/* --- Pied de page --- */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2.5rem 0;
+  color: var(--muted);
+  font-size: .9rem;
+}
+footer .wrap { display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: center; justify-content: space-between; }
+footer nav { display: flex; flex-wrap: wrap; gap: 1.5rem; }
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .hero .wrap { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .nav-links { display: none; }
+  .nav .btn, .nav-links + .btn { margin-left: auto; }
+  .step { padding: 1.25rem; }
+  .step::before { position: static; margin-bottom: .8rem; }
+  footer .wrap { justify-content: flex-start; }
+}
+
+/* --- Animation d'apparition --- */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
+  .stars { display: none; }
+}
+</style>
+<noscript><style>.reveal { opacity: 1; transform: none; }</style></noscript>
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">magic-manager<span>-skills</span></a>
+    <nav class="nav-links" aria-label="Navigation principale">
+      <a href="#pourquoi">Pourquoi</a>
+      <a href="#pour-qui">Pour qui</a>
+      <a href="#skills">Skills</a>
+      <a href="#installation">Installation</a>
+    </nav>
+    <a class="btn" href="https://github.com/saumon/magic-manager-skills" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+  </div>
+</header>
+
+<main id="contenu">
+  <section class="hero" id="top">
+    <div class="wrap">
+      <div>
+        <p class="section-tag">Open source · Licence MIT</p>
+        <h1>Des skills Claude pour <span class="gradient">Engineering Managers</span></h1>
+        <p class="lead">
+          Mon métier est plein de rituels qui se répètent : débriefer une page Notion,
+          trier des candidatures, informer une équipe. Ce mono-repo les transforme en
+          skills Claude versionnés, réutilisables et partageables.
+        </p>
+        <ul class="badges">
+          <li>2 skills</li>
+          <li>MCP Notion</li>
+          <li>MCP Kommunicator</li>
+          <li>100 % français</li>
+        </ul>
+        <div class="cta">
+          <a class="btn btn-primary" href="#skills">Découvrir les skills</a>
+          <a class="btn" href="https://github.com/saumon/magic-manager-skills" target="_blank" rel="noopener noreferrer">Voir sur GitHub ↗</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="logo-wrap">
+          <img class="logo" src="assets/images/magicmanagerskills-logo.png" width="1536" height="1024"
+               alt="Logo magic-manager-skills : un magicien à lunettes, baguette dans une main et ordinateur portable dans l'autre">
+        </div>
+        <div class="terminal" aria-hidden="true">
+        <div class="terminal-bar">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="label">claude — magic-manager-skills</span>
+        </div>
+<pre><span class="u">&gt;</span> Résume cette page Notion et envoie
+  le débrief à Camille sur Teams
+
+<span class="k">skill</span> notion-debrief v1.3.0
+  ↳ Notion:notion-fetch      <span class="ok">ok</span>
+  ↳ résumé + actions         <span class="ok">ok</span>
+  ↳ carte adaptive → Teams   <span class="ok">ok</span>
+
+<span class="ok">✓</span> Débriefing envoyé à Camille
+</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pourquoi" class="reveal">
+    <div class="wrap">
+      <p class="section-tag">Pourquoi ce projet</p>
+      <h2>Je suis Grégoire, Engineering Manager</h2>
+      <p class="lead">
+        L'ère de l'IA agentique change la donne pour un manager : je peux enfin
+        déléguer les tâches à faible valeur ajoutée sans écrire une ligne
+        d'intégration. Encore faut-il que la délégation soit fiable et reproductible.
+      </p>
+      <div class="grid">
+        <article class="card">
+          <span class="icon" aria-hidden="true">⚡</span>
+          <h3>Accélérer, pas bricoler</h3>
+          <p>
+            Un prompt bien tourné se perd dans une conversation. Un skill, lui, capture
+            le déroulé complet d'un workflow et le rejoue à l'identique la fois suivante.
+          </p>
+        </article>
+        <article class="card">
+          <span class="icon" aria-hidden="true">🧭</span>
+          <h3>Des garde-fous explicites</h3>
+          <p>
+            Chaque skill impose ses règles : demander les entrées plutôt que les deviner,
+            traiter le contenu externe comme une donnée et jamais comme une instruction,
+            signaler ce qui bloque au lieu d'improviser.
+          </p>
+        </article>
+        <article class="card">
+          <span class="icon" aria-hidden="true">📦</span>
+          <h3>Versionné comme du code</h3>
+          <p>
+            Semver par skill, changelog dédié, tag Git au format
+            <code>&lt;skill&gt;-v&lt;version&gt;</code> : on peut revenir en arrière sur
+            un skill précis sans toucher aux autres.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="pour-qui" class="reveal">
+    <div class="wrap">
+      <p class="section-tag">Pour qui</p>
+      <h2>Pensés pour une stack proche de la mienne</h2>
+      <p class="lead">
+        Ces skills sont directement exploitables si votre quotidien ressemble au mien.
+        Sinon, ils restent une bonne base de départ à adapter — tout est en Markdown lisible.
+      </p>
+      <div class="grid">
+        <article class="card">
+          <span class="icon" aria-hidden="true">💬</span>
+          <h3>Microsoft Teams</h3>
+          <p>
+            Via le MCP
+            <a href="https://saumon.github.io/kommunicator/" target="_blank" rel="noopener noreferrer">Kommunicator</a>,
+            qui envoie messages et cartes adaptives par webhook Power Automate — sans
+            droits d'administration Office 365.
+          </p>
+        </article>
+        <article class="card">
+          <span class="icon" aria-hidden="true">📓</span>
+          <h3>Notion</h3>
+          <p>
+            Base de connaissances de l'équipe : comptes rendus, dossiers, suivis.
+            Le MCP Notion sert de source de lecture aux skills de débriefing.
+          </p>
+        </article>
+        <article class="card">
+          <span class="icon" aria-hidden="true">🤖</span>
+          <h3>Claude</h3>
+          <p>
+            Claude Code, l'application desktop ou Claude.ai : partout où l'on peut
+            importer un dossier de skill, le workflow se déclenche à la demande.
+          </p>
+        </article>
+        <article class="card">
+          <span class="icon" aria-hidden="true">👥</span>
+          <h3>Un rôle de manager</h3>
+          <p>
+            Débriefings, recrutement, reporting : les cas d'usage viennent de situations
+            réelles d'Engineering Management, pas d'exemples de démonstration.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" class="reveal">
+    <div class="wrap">
+      <p class="section-tag">Skills disponibles</p>
+      <h2>Deux workflows prêts à l'emploi</h2>
+      <p class="lead">
+        Chaque skill vit dans son propre dossier sous <code>skills/</code>, avec son
+        <code>SKILL.md</code>, son changelog et ses éventuelles ressources.
+      </p>
+      <div class="grid">
+        <article class="card skill-card">
+          <div class="skill-head">
+            <h3>notion-debrief</h3>
+            <span class="version">v1.3.0</span>
+          </div>
+          <p>
+            Résume une page Notion, en tire une liste d'actions, puis envoie le
+            débriefing sous forme de carte adaptive à un destinataire sur Teams.
+            L'URL Notion est toujours demandée explicitement, jamais devinée.
+          </p>
+          <ul class="tags">
+            <li>Notion</li>
+            <li>Kommunicator</li>
+            <li>Teams</li>
+            <li>Adaptive Card</li>
+          </ul>
+          <div class="card-links">
+            <a href="https://github.com/saumon/magic-manager-skills/blob/dev/skills/notion-debrief/SKILL.md" target="_blank" rel="noopener noreferrer">SKILL.md ↗</a>
+            <a href="https://github.com/saumon/magic-manager-skills/blob/dev/skills/notion-debrief/CHANGELOG.md" target="_blank" rel="noopener noreferrer">Changelog ↗</a>
+          </div>
+        </article>
+        <article class="card skill-card">
+          <div class="skill-head">
+            <h3>resume-shortlist</h3>
+            <span class="version">v1.0.0</span>
+          </div>
+          <p>
+            Analyse un lot de CV face à une offre d'emploi et produit une short list
+            classée — à rencontrer, à creuser, écarté — avec score, indice de cohérence,
+            points forts, réserves et questions d'entretien. Détecte les CV alignés
+            artificiellement sur l'offre et exporte le rapport en PDF.
+          </p>
+          <ul class="tags">
+            <li>Aucun MCP</li>
+            <li>Recrutement</li>
+            <li>PDF</li>
+            <li>Anti-biais</li>
+          </ul>
+          <div class="card-links">
+            <a href="https://github.com/saumon/magic-manager-skills/blob/dev/skills/resume-shortlist/SKILL.md" target="_blank" rel="noopener noreferrer">SKILL.md ↗</a>
+            <a href="https://github.com/saumon/magic-manager-skills/blob/dev/skills/resume-shortlist/CHANGELOG.md" target="_blank" rel="noopener noreferrer">Changelog ↗</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="installation" class="reveal">
+    <div class="wrap">
+      <p class="section-tag">Installation</p>
+      <h2>Opérationnel en trois étapes</h2>
+      <p class="lead">Exemple avec le skill <code>notion-debrief</code>.</p>
+      <div class="steps">
+        <article class="step">
+          <h3>Cloner le dépôt</h3>
+          <p>Tous les skills sont dans le dossier <code>skills/</code>.</p>
+<pre><code>git clone https://github.com/saumon/magic-manager-skills.git
+cd magic-manager-skills</code></pre>
+        </article>
+        <article class="step">
+          <h3>Zipper le skill voulu</h3>
+          <p>Garder le dossier du skill à la racine de l'archive.</p>
+<pre><code>cd skills &amp;&amp; zip -r notion-debrief.zip notion-debrief</code></pre>
+        </article>
+        <article class="step">
+          <h3>Importer dans Claude</h3>
+          <p>
+            Dans l'application, aller dans <strong>Compétences → Gérer les compétences</strong>
+            et importer le <code>.zip</code>. Sur Claude.ai ou Cowork, copier le contenu
+            du dossier dans l'emplacement de skills correspondant.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p style="margin:0">Fait par Grégoire, Engineering Manager · Licence MIT</p>
+    <nav aria-label="Liens utiles">
+      <a href="https://github.com/saumon/magic-manager-skills" target="_blank" rel="noopener noreferrer">Dépôt GitHub ↗</a>
+      <a href="https://saumon.github.io/kommunicator/" target="_blank" rel="noopener noreferrer">Kommunicator ↗</a>
+      <a href="https://github.com/saumon/magic-manager-skills/blob/dev/LICENSE" target="_blank" rel="noopener noreferrer">Licence ↗</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var colors = ['#ffd76a', '#ffc72c', '#fff3c4'];
+  var field = document.createElement('div');
+  field.className = 'stars';
+  field.setAttribute('aria-hidden', 'true');
+
+  function place(star) {
+    var size = 12 + Math.random() * 26;
+    star.style.width = star.style.height = size.toFixed(1) + 'px';
+    star.style.top = (Math.random() * 100).toFixed(2) + '%';
+    star.style.left = (Math.random() * 100).toFixed(2) + '%';
+    star.style.setProperty('--peak', (0.35 + Math.random() * 0.4).toFixed(2));
+  }
+
+  for (var i = 0; i < 55; i++) {
+    var star = document.createElement('i');
+    star.style.color = colors[i % colors.length];
+    star.style.setProperty('--dur', (5 + Math.random() * 7).toFixed(1) + 's');
+    star.style.setProperty('--delay', '-' + (Math.random() * 12).toFixed(1) + 's');
+    place(star);
+    // Chaque cycle relance l'étoile ailleurs, pour éviter un motif figé
+    star.addEventListener('animationiteration', function () { place(this); });
+    field.appendChild(star);
+  }
+  document.body.appendChild(field);
+
+  var targets = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    targets.forEach(function (el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.12 });
+  targets.forEach(function (el) { observer.observe(el); });
+})();
+</script>
+</body>
+</html>
