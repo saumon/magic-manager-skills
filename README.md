@@ -2,6 +2,15 @@
   <img src="docs/assets/images/magicmanagerskills-logo.png" alt="magic-manager-skills" width="520">
 </p>
 
+<p align="center">
+  <a href="https://saumon.github.io/magic-manager-skills/"><img alt="Landing page" src="https://img.shields.io/badge/landing%20page-en%20ligne-7c8cff?style=flat-square&logo=githubpages&logoColor=white"></a>
+  <a href="LICENSE"><img alt="Licence MIT" src="https://img.shields.io/github/license/saumon/magic-manager-skills?style=flat-square&color=4fd1c5"></a>
+  <img alt="Skills disponibles" src="https://img.shields.io/badge/skills-2-7c8cff?style=flat-square">
+  <img alt="Claude Skills" src="https://img.shields.io/badge/Claude-Skills-d97757?style=flat-square&logo=anthropic&logoColor=white">
+  <img alt="MCP requis" src="https://img.shields.io/badge/MCP-Notion%20%7C%20Kommunicator-4fd1c5?style=flat-square">
+  <img alt="Langue : français" src="https://img.shields.io/badge/langue-fran%C3%A7ais-7c8cff?style=flat-square">
+</p>
+
 # magic-manager-skills
 
 Mono-repo de skills Claude pour l'automatisation de tâches de management
