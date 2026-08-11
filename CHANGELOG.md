@@ -4,6 +4,14 @@ Ce fichier référence les changements structurels du mono-repo (ajout/retrait
 de skills). L'historique détaillé de chaque skill vit dans son propre
 `skills/<nom>/CHANGELOG.md`.
 
+## 2026-08-11
+
+- Ajout de la landing page statique [`docs/index.html`](docs/index.html),
+  publiée via GitHub Pages depuis le dossier `/docs` : présentation du projet,
+  de la stack visée (Teams via Kommunicator, Notion, Claude), des skills
+  disponibles et de la procédure d'installation. Page autonome (HTML + CSS + JS
+  inline, aucune dépendance externe), en français, responsive.
+
 ## 2026-08-10
 
 - Ajout du skill `resume-shortlist` v1.0.0 : tri de CV face à une offre d'emploi

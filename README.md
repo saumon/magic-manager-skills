@@ -1,7 +1,15 @@
+<p align="center">
+  <img src="docs/assets/images/magicmanagerskills-logo.png" alt="magic-manager-skills" width="520">
+</p>
+
 # magic-manager-skills
 
 Mono-repo de skills Claude pour l'automatisation de tâches de management
 (débriefings, suivi RH, reporting, etc.).
+
+Landing page : <https://saumon.github.io/magic-manager-skills/>
+(source : [`docs/index.html`](docs/index.html), publiée par GitHub Pages depuis
+le dossier `/docs` de la branche `dev`).
 
 ## Structure
 
@@ -11,6 +19,12 @@ magic-manager-skills/
 ├── CHANGELOG.md
 ├── LICENSE
 ├── .gitignore
+├── docs/
+│   ├── index.html
+│   ├── .nojekyll
+│   └── assets/
+│       └── images/
+│           └── magicmanagerskills-logo.png
 └── skills/
     ├── notion-debrief/
     │   ├── SKILL.md
