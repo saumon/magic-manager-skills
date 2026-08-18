@@ -4,6 +4,18 @@ Ce fichier référence les changements structurels du mono-repo (ajout/retrait
 de skills). L'historique détaillé de chaque skill vit dans son propre
 `skills/<nom>/CHANGELOG.md`.
 
+## 2026-08-18
+
+- `resume-shortlist` passe en v1.1.0 : colonne « Fichier » dans le tableau de
+  synthèse, section obligatoire « Candidats écartés (must-have non satisfait) »
+  avec les motifs de refus, marges du PDF resserrées et correction du tableau
+  qui débordait (barre de défilement horizontale, texte illisible). Mise en
+  forme du rapport revue : séparateurs entre fiches, titres non numérotés,
+  police légèrement agrandie. Ajout de la feuille de style
+  `skills/resume-shortlist/assets/report.css`, appliquée à la conversion PDF.
+  Voir
+  [skills/resume-shortlist/CHANGELOG.md](skills/resume-shortlist/CHANGELOG.md).
+
 ## 2026-08-11
 
 - Ajout de la landing page statique [`docs/index.html`](docs/index.html),

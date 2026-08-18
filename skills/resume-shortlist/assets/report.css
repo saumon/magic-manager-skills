@@ -1,0 +1,125 @@
+/* Feuille de style de l'export PDF du skill resume-shortlist.
+   Objectifs : marges resserrées, tableau de synthèse intégralement visible
+   (aucun débordement horizontal, aucune barre de défilement), titres non
+   numérotés et fiches détaillées séparées par un filet. */
+
+@page {
+  size: A4;
+  margin: 12mm 10mm;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "DejaVu Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.45;
+  color: #1a1a1a;
+}
+
+h1 { font-size: 18pt; margin: 0 0 4mm; }
+h2 { font-size: 14pt; margin: 6mm 0 2mm; }
+h3 { font-size: 12pt; margin: 5mm 0 2mm; }
+h4 { font-size: 11pt; margin: 4mm 0 1.5mm; page-break-after: avoid; }
+
+/* Les titres ne sont jamais numérotés automatiquement : seul le rang des fiches
+   candidat, écrit dans le Markdown, porte un numéro. */
+body { counter-reset: none; }
+h1::before, h2::before, h3::before, h4::before { content: none; }
+
+p, ul, ol { margin: 0 0 2.5mm; }
+ul, ol { padding-left: 5mm; }
+li { margin-bottom: 1mm; }
+
+/* Séparateur entre deux fiches détaillées (« --- » dans le Markdown). */
+hr {
+  border: 0;
+  border-top: 0.6pt solid #b4bac6;
+  margin: 5mm 0 4mm;
+}
+
+hr + h4 { margin-top: 0; }
+
+/* --- Tableau de synthèse ------------------------------------------------- */
+
+table {
+  width: 100% !important;
+  max-width: 100%;
+  table-layout: fixed !important;   /* sans ceci, le moteur répartit les colonnes par contenu */
+  border-collapse: collapse;
+  margin: 0 0 4mm;
+  font-size: 8.5pt;
+  page-break-inside: auto;
+}
+
+/* Neutralise les conteneurs défilants ajoutés par les thèmes Markdown :
+   en PDF, une zone scrollable devient du texte tronqué. */
+table, thead, tbody, tr, th, td,
+.markdown-body table,
+div:has(> table) {
+  overflow: visible;
+  overflow-x: visible;
+}
+
+th, td {
+  border: 0.4pt solid #c8ccd4;
+  padding: 1.2mm 1.6mm;
+  text-align: left;
+  vertical-align: top;
+  white-space: normal;        /* jamais de nowrap : la cellule doit se replier */
+  overflow-wrap: anywhere;    /* coupe les noms de fichiers longs */
+  word-break: break-word;
+  hyphens: auto;
+}
+
+th {
+  background: #eef0f5;
+  font-weight: 600;
+}
+
+thead { display: table-header-group; }  /* en-tête répété sur chaque page */
+tr { page-break-inside: avoid; }
+
+/* Largeurs des 7 colonnes du tableau de synthèse :
+   # · Candidat · Fichier · Score · Cohérence · Catégorie · Verdict.
+   Les six premières sont resserrées au strict nécessaire pour laisser au
+   verdict la plus grande part de la largeur utile.
+   !important : beaucoup de thèmes Markdown posent leurs propres largeurs,
+   qui l'emportaient jusqu'ici et rendaient la colonne Verdict étroite. */
+table th:nth-child(1), table td:nth-child(1) { width: 3% !important; }
+table th:nth-child(2), table td:nth-child(2) { width: 11% !important; }
+table th:nth-child(3), table td:nth-child(3) { width: 10% !important; font-size: 7.5pt; }
+table th:nth-child(4), table td:nth-child(4) { width: 4% !important; }
+table th:nth-child(5), table td:nth-child(5) { width: 7% !important; }
+table th:nth-child(6), table td:nth-child(6) { width: 8% !important; }
+table th:nth-child(7), table td:nth-child(7) { width: 57% !important; }
+
+/* Si le convertisseur ignore les sélecteurs nth-child, un <colgroup> dans le
+   HTML intermédiaire porte les mêmes largeurs. */
+colgroup col:nth-child(1) { width: 3%; }
+colgroup col:nth-child(2) { width: 11%; }
+colgroup col:nth-child(3) { width: 10%; }
+colgroup col:nth-child(4) { width: 4%; }
+colgroup col:nth-child(5) { width: 7%; }
+colgroup col:nth-child(6) { width: 8%; }
+colgroup col:nth-child(7) { width: 57%; }
+
+/* Colonnes courtes : en-têtes compacts, autorisés à se replier, et padding
+   réduit pour ne pas gaspiller la largeur gagnée. */
+table th { font-size: 8pt; hyphens: none; }
+table th:nth-child(-n+6), table td:nth-child(-n+6) { padding: 1.2mm 1mm; }
+table td:nth-child(1), table td:nth-child(4) { text-align: center; }
+
+/* --- Divers -------------------------------------------------------------- */
+
+code {
+  font-family: "DejaVu Sans Mono", Consolas, monospace;
+  font-size: 9pt;
+}
+
+blockquote {
+  margin: 0 0 3mm;
+  padding-left: 3mm;
+  border-left: 1pt solid #c8ccd4;
+  color: #444;
+}

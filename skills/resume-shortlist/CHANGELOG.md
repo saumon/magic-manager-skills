@@ -4,6 +4,59 @@ Toutes les versions notables de ce skill sont documentées ici. Le format
 suit [Keep a Changelog](https://keepachangelog.com/), et le versionnement
 suit [semver](https://semver.org/) (MAJOR.MINOR.PATCH).
 
+## [1.1.0] - 2026-08-18
+
+### Ajouté
+
+- Colonne **Fichier** dans le tableau de synthèse (fil de discussion et PDF) :
+  chaque ligne est reliée au document source sans rouvrir les fiches. Nom
+  repris tel quel, jamais renommé ; plusieurs fichiers pour un même candidat
+  sont listés séparés par ` · ` ; les noms trop longs sont tronqués au milieu
+  pour préserver la version ou la date en fin de nom.
+- Feuille de style `assets/report.css` appliquée à la conversion PDF, avec les
+  commandes correspondantes pour `markdown-pdf`, `pandoc`, `weasyprint` et
+  `wkhtmltopdf`, et repli sur une balise `<style>` si le convertisseur
+  n'accepte pas de CSS externe.
+- Section « Règles de mise en page du PDF » à l'étape 8, avec vérification
+  obligatoire avant livraison que la dernière colonne du tableau est visible et
+  que le verdict occupe plus de la moitié de la largeur : sinon, basculer le
+  tableau en HTML avec `<colgroup>` et régénérer, pas livrer en signalant le
+  problème.
+- Séparateur horizontal entre les fiches détaillées du PDF, qui s'enchaînaient
+  jusqu'ici en un bloc continu.
+- Section obligatoire « Candidats écartés (must-have non satisfait) » dans la
+  restitution (chat et PDF), avec pour chaque candidat le fichier, le score, le
+  ou les must-have manquants et le constat du CV qui les fonde. La ligne de
+  verdict du tableau ne suffisait pas à justifier un refus relu à froid ou
+  transmis à un intermédiaire.
+
+### Modifié
+
+- Marges du PDF resserrées à 12 mm (haut/bas) et 10 mm (gauche/droite) sur A4,
+  au lieu des marges par défaut des convertisseurs (souvent 25 mm et plus) qui
+  amputaient la largeur utile et comprimaient le tableau.
+- Police du rapport légèrement agrandie : corps à 10,5 pt et tableau de
+  synthèse à 8,5 pt.
+- Titres du rapport (« Cadre de l'analyse », « Tableau de synthèse », « Fiches
+  détaillées », « Récapitulatif cohérence ») laissés sans numérotation, les
+  options de numérotation automatique des convertisseurs étant explicitement
+  désactivées. Seul le rang de classement des candidats reste numéroté.
+
+### Corrigé
+
+- Le tableau de synthèse du PDF débordait et produisait une barre de
+  défilement horizontale, rendant le texte illisible à l'impression. Le
+  tableau est désormais en `width: 100%` / `table-layout: fixed`, avec
+  largeurs de colonnes imposées — les six premières resserrées au strict
+  nécessaire et 57 % de la largeur pour le verdict, seule colonne portant une
+  phrase —, retour à la ligne dans les cellules (`overflow-wrap: anywhere`) et
+  neutralisation explicite des `overflow-x` et `white-space: nowrap` posés par
+  les thèmes Markdown par défaut.
+- Le tableau de synthèse du PDF s'écrit désormais en HTML avec un `<colgroup>`
+  à largeurs en ligne : converti depuis un tableau Markdown, les largeurs
+  étaient écrasées par la feuille de style du convertisseur et les colonnes
+  réparties par contenu.
+
 ## [1.0.0] - 2026-08-10
 
 ### Ajouté

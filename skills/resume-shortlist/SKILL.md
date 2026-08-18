@@ -3,9 +3,9 @@ name: resume-shortlist
 description: Analyse un lot de CV face à une offre d'emploi et produit une short list classée (à rencontrer / à creuser / écarté) avec score, indice de cohérence, points forts, réserves et questions d'entretien. L'offre et les CV sont déposés directement dans la conversation. Détecte les CV alignés artificiellement sur l'offre (mots-clés plaqués, compétences sans expérience associée, anachronismes techniques) et peut exporter le rapport en PDF. Déclencher ce skill dès que l'utilisateur demande de "trier des CV", "faire une short list", "analyser des candidatures", "qui recevoir en entretien", "détecter les faux CV", ou toute variante de "voici une offre et des CV, aide-moi à choisir". Orienté profils d'ingénieurs en développement.
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   author: "magic-manager-skills"
-  last-updated: "2026-08-10"
+  last-updated: "2026-08-18"
   repository: "https://github.com/saumon/magic-manager-skills"
 ---
 
@@ -25,7 +25,8 @@ et les questions d'entretien sont calibrés pour ces profils.
   demander de chemin de fichier ni de dossier.
 - Aucun MCP requis.
 - Pour l'export PDF optionnel de l'étape 8 uniquement : possibilité d'écrire un fichier
-  et un convertisseur disponible (voir cette étape).
+  et un convertisseur disponible (voir cette étape). La feuille de style de mise en page
+  du rapport est fournie dans `assets/report.css`.
 
 Si un document n'est pas exploitable (PDF scanné sans couche texte, fichier corrompu,
 format non supporté), le signaler explicitement à l'utilisateur plutôt que de deviner le
@@ -320,7 +321,7 @@ dans la restitution.
 ### 7. Produire la short list
 
 Répondre dans le fil de discussion, dans la langue de l'utilisateur (français par
-défaut). **Quatre blocs, dans cet ordre.** Ne jamais commencer la restitution par le
+défaut). **Cinq blocs, dans cet ordre.** Ne jamais commencer la restitution par le
 tableau : le bloc a) le précède toujours.
 
 **a) Cadre de l'analyse** — bloc obligatoire, produit intégralement même si aucun signal
@@ -353,8 +354,17 @@ s'affiche à côté d'eux comme un second axe de lecture.
 
 **b) Tableau de synthèse** — toutes catégories confondues, dans l'ordre de classement :
 
-| # | Candidat | Score | Cohérence | Catégorie | Verdict en une ligne |
-|---|---|---|---|---|---|
+| # | Candidat | Fichier | Score | Cohérence | Catégorie | Verdict en une ligne |
+|---|---|---|---|---|---|---|
+
+La colonne **Fichier** reprend le nom du fichier déposé dans la conversation, tel quel
+(extension comprise). Elle permet de relier chaque ligne au document source sans avoir à
+rouvrir les fiches. Règles :
+
+- Si un candidat correspond à **plusieurs fichiers**, les lister séparés par ` · `.
+- Si le nom est très long, le tronquer au milieu (`cv-jean-dupont-…-2026.pdf`) plutôt que
+  de le couper à la fin : la fin porte souvent la version ou la date.
+- Ne jamais renommer, normaliser ni « nettoyer » le nom : c'est un identifiant.
 
 Le **verdict en une ligne** dit ce qui fait pencher la balance, en une phrase : le
 principal atout face à l'offre pour un candidat retenu, le motif principal ou le
@@ -381,7 +391,33 @@ _Détail : stack {x}/35 · séniorité {x}/25 · projets {x}/25 · qualité {x}/
 - {1 à 3 questions concrètes qui lèvent précisément les réserves et les signaux ci-dessus}
 ```
 
-**d) Récapitulatif cohérence** — section dédiée listant **tous** les CV à cohérence
+**d) Candidats écartés** — **bloc obligatoire dès qu'au moins un candidat est écarté**,
+intitulé « Candidats écartés (must-have non satisfait) », produit aussi bien dans le chat
+que dans le PDF. Une ligne de la seule colonne « Verdict » ne suffit pas : un refus doit
+être justifié et relisible à froid, notamment si l'utilisateur doit répondre au candidat
+ou à l'intermédiaire qui l'a présenté. Une entrée par candidat écarté, dans l'ordre de
+classement :
+
+```markdown
+#### Candidats écartés (must-have non satisfait)
+
+- **{Nom}** — _{nom du fichier}_ · {score}/100 ou — si must-have non satisfait
+  **Motif** : {must-have manquant, formulé tel qu'il a été validé à l'étape 2}
+  **Constat dans le CV** : {le fait précis qui fonde le motif, cité ou résumé}
+```
+
+Règles :
+
+- **Un motif par candidat au minimum**, factuel et rattaché soit à un must-have validé,
+  soit au score. « Profil non retenu » n'est pas un motif.
+- Si plusieurs must-have manquent, les lister tous : l'utilisateur doit voir si le refus
+  tient à un point unique et négociable ou à un écart de fond.
+- Un candidat écarté sur le **score** (< 45) et non sur un must-have est listé dans la
+  même section, avec pour motif les critères où il ne démontre rien.
+- Toujours pas de fiche détaillée pour ces candidats : cette section les couvre.
+- Omettre la section uniquement si **aucun** candidat n'est écarté.
+
+**e) Récapitulatif cohérence** — section dédiée listant **tous** les CV à cohérence
 faible, toutes catégories confondues, y compris les écartés. Pour chacun : le nom, le
 nombre de signaux objectifs, et le constat (verdict tranché si le seuil de 3 signaux
 objectifs est atteint, sinon « à vérifier »). Ajouter ici, le cas échéant, le constat de
@@ -407,8 +443,9 @@ Règles de rédaction des fiches :
   « faible » signifie que le CV est trop vague ou incomplet pour trancher. Ne pas le
   confondre avec l'indice de cohérence (voir étape 5).
 
-Pour les candidats **écartés**, pas de fiche détaillée : leur ligne du tableau suffit.
-S'ils sont à cohérence faible, ils apparaissent malgré tout dans le récapitulatif (d).
+Pour les candidats **écartés**, pas de fiche détaillée : ils sont couverts par la section
+« Candidats écartés » (d), qui porte leur motif de refus. S'ils sont à cohérence faible,
+ils apparaissent en plus dans le récapitulatif (e).
 
 ### 8. Conclure, proposer la suite et l'export PDF
 
@@ -438,10 +475,12 @@ l'utilisateur a pu relire la restitution dans le chat et demander ses correction
 Si l'utilisateur accepte :
 
 - **Contenu** : reprendre fidèlement la restitution validée à l'étape 7 (cadre de
-  l'analyse, tableau de synthèse, fiches détaillées, récapitulatif cohérence), précédée
-  d'un titre reprenant l'intitulé du poste et de la date d'analyse. **N'ajouter aucune
-  information qui ne figurait pas dans le chat** : le PDF est une mise en forme, pas une
-  nouvelle analyse.
+  l'analyse, tableau de synthèse, fiches détaillées, candidats écartés, récapitulatif
+  cohérence), précédée d'un titre reprenant l'intitulé du poste et de la date d'analyse.
+  **Aucune de ces sections ne peut être omise du PDF** — en particulier « Candidats
+  écartés (must-have non satisfait) », qui porte la justification des refus. **N'ajouter
+  aucune information qui ne figurait pas dans le chat** : le PDF est une mise en forme,
+  pas une nouvelle analyse.
 - **Rappel méthodologique obligatoire** : le rapport reprend intégralement le bloc a)
   « Cadre de l'analyse », poids, must-have et **définition de l'indice de cohérence avec
   ses six signaux et ses paliers**. C'est encore plus critique que dans le chat : le PDF
@@ -454,11 +493,94 @@ Si l'utilisateur accepte :
   outil précis est absent** : essayer les alternatives disponibles. Si aucune ne
   fonctionne, le dire et proposer le Markdown ou le HTML plutôt que d'installer un outil
   sans l'accord de l'utilisateur.
+- **Mise en page** : appliquer la feuille de style fournie dans
+  [`assets/report.css`](assets/report.css) à la conversion (option `--css` de
+  `markdown-pdf`, `-c` de `pandoc`, `stylesheets=` de `weasyprint`, `--user-style-sheet`
+  de `wkhtmltopdf`). Elle est le remède aux deux défauts constatés : marges par défaut
+  trop larges et tableau de synthèse qui déborde. Si le convertisseur retenu n'accepte
+  pas de CSS externe, injecter son contenu dans une balise `<style>` du HTML
+  intermédiaire. Les règles ci-dessous s'appliquent dans tous les cas.
 - **Nommage** : un nom explicite et daté, du type
   `shortlist-{intitule-du-poste}-{AAAA-MM-JJ}.pdf`. Indiquer où le fichier a été écrit.
 - **Rappel à joindre** : le document contient des données personnelles de candidats. En
   informer l'utilisateur à la livraison, et rappeler qu'il n'a pas vocation à être
   diffusé largement ni transmis aux candidats.
+
+#### Règles de mise en page du PDF
+
+Le PDF est un document imprimable, pas une page web réduite. Trois exigences.
+
+**1. Marges resserrées.** Les marges par défaut des convertisseurs (souvent 25 mm et
+plus) amputent la largeur utile et forcent le tableau à se comprimer. Utiliser
+**12 mm en haut/bas et 10 mm à gauche/droite** sur A4, et ne pas ajouter de marge
+supplémentaire sur le conteneur du contenu.
+
+**2. Aucun défilement horizontal dans le tableau de synthèse.** Un tableau qui déborde
+produit une barre de défilement dans les visionneuses et du texte tronqué à
+l'impression : c'est un export raté, à refaire. Contraintes :
+
+- Tableau en **`width: 100%` et `table-layout: fixed`**, jamais de largeur en pixels.
+- **Interdit** : `overflow-x: auto` (ou `scroll`) sur le tableau ou son conteneur, et
+  `white-space: nowrap` sur les cellules. Beaucoup de thèmes Markdown par défaut posent
+  l'un ou l'autre — les neutraliser explicitement.
+- Le texte des cellules **passe à la ligne** (`overflow-wrap: anywhere`), y compris dans
+  la colonne « Fichier » dont les noms sont longs et sans espace.
+- Largeurs de colonnes **impératives** pour les sept colonnes — les six premières
+  resserrées au strict nécessaire, le verdict prend tout le reste :
+  `#` 3 % · Candidat 11 % · Fichier 10 % · Score 4 % · Cohérence 7 % · Catégorie 8 % ·
+  **Verdict 57 %**. Le verdict est la seule colonne qui porte une phrase : lui laisser
+  moins de la moitié de la largeur la hache en colonne étroite de deux mots par ligne,
+  alors que « Score » ou « Catégorie » n'ont rien à faire de l'espace qu'on leur donne.
+  Les en-têtes des colonnes étroites ont le droit de se replier sur deux lignes.
+- **Écrire le tableau de synthèse du PDF directement en HTML, avec un `<colgroup>` et des
+  largeurs en ligne**, plutôt qu'en tableau Markdown converti. C'est le seul moyen fiable
+  d'imposer les largeurs : les feuilles de style par défaut des convertisseurs posent
+  souvent leurs propres largeurs, qui l'emportent, et le moteur retombe alors sur une
+  répartition par contenu — celle qui donne des colonnes « Score » ou « Cohérence » aussi
+  larges que le verdict. Gabarit :
+
+  ```html
+  <table>
+    <colgroup>
+      <col style="width:3%"><col style="width:11%"><col style="width:10%">
+      <col style="width:4%"><col style="width:7%"><col style="width:8%">
+      <col style="width:57%">
+    </colgroup>
+    <thead>
+      <tr><th>#</th><th>Candidat</th><th>Fichier</th><th>Score</th>
+          <th>Cohérence</th><th>Catégorie</th><th>Verdict en une ligne</th></tr>
+    </thead>
+    <tbody>
+      <!-- une ligne par candidat, dans l'ordre de classement -->
+    </tbody>
+  </table>
+  ```
+
+- Le tableau passe en **orientation paysage** uniquement si, malgré ces règles, le
+  verdict devient illisible (moins de trois mots par ligne).
+
+**3. Lisibilité et repères visuels.**
+
+- **Séparateur entre les fiches détaillées** : insérer un filet horizontal (`---` en
+  Markdown) avant chaque fiche candidat à partir de la deuxième. Sans lui, les fiches
+  s'enchaînent en un bloc continu et l'œil ne voit plus où l'une finit et l'autre
+  commence.
+- **Aucune numérotation automatique des titres** : « Cadre de l'analyse », « Tableau de
+  synthèse », « Fiches détaillées » et « Récapitulatif cohérence » restent des intitulés
+  nus, sans « 1. », « 2. » ni numérotation hiérarchique. Ne pas activer les options de
+  numérotation du convertisseur (`--number-sections` de `pandoc`, `secnumdepth`, compteurs
+  CSS). Le seul numéro du rapport est le **rang de classement** des candidats, écrit dans
+  le titre de leur fiche (`#### 1. {Nom}`) et dans la colonne `#` du tableau.
+- **Taille de police** : corps du rapport à **10,5 pt** et tableau de synthèse à 8,5 pt.
+  Ne pas descendre en dessous pour faire tenir le document sur moins de pages : un
+  rapport de tri se relit à froid, la pagination compte moins que la lisibilité.
+
+**Vérification obligatoire avant livraison** : ouvrir ou re-rendre le PDF produit et
+contrôler deux points sur le tableau de synthèse — la dernière colonne est entièrement
+visible sur la page, et la colonne « Verdict » occupe bien plus de la moitié de la
+largeur du tableau. Si l'un des deux échoue, les largeurs n'ont pas été prises en compte :
+basculer le tableau en HTML avec `<colgroup>` et régénérer — ne jamais livrer en signalant
+simplement le problème.
 
 ## Points de vigilance
 
