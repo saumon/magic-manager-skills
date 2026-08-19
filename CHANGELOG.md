@@ -4,6 +4,23 @@ Ce fichier référence les changements structurels du mono-repo (ajout/retrait
 de skills). L'historique détaillé de chaque skill vit dans son propre
 `skills/<nom>/CHANGELOG.md`.
 
+## 2026-08-19
+
+- `resume-shortlist` passe en v1.2.0 : ajout d'un tableau « Appréciation des
+  compétences techniques » pour chaque candidat, retenus comme écartés, dans la
+  synthèse du chat comme dans le PDF. Chaque compétence listée dans l'offre y
+  est positionnée sur quatre niveaux (hors sujet / peu pertinent / moyen /
+  bien), dans l'ordre de l'offre, sans modifier le score. Les compétences
+  techniques sont désormais extraites et validées dès l'étape 2, et
+  `skills/resume-shortlist/assets/report.css` porte le rendu en sélecteur à
+  quatre segments. Corrige au passage le tableau de synthèse, qui s'affichait
+  dans le chat comme un bloc de balises HTML brutes : la restitution du fil de
+  discussion est désormais explicitement en Markdown seul, le HTML restant
+  réservé au fichier converti en PDF. Corrige également les marges du PDF, qui
+  restaient bien plus larges que prévu et tassaient le rapport sur les deux
+  tiers de la largeur. Voir
+  [skills/resume-shortlist/CHANGELOG.md](skills/resume-shortlist/CHANGELOG.md).
+
 ## 2026-08-18
 
 - `resume-shortlist` passe en v1.1.0 : colonne « Fichier » dans le tableau de

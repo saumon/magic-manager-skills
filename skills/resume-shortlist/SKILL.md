@@ -1,11 +1,11 @@
 ---
 name: resume-shortlist
-description: Analyse un lot de CV face à une offre d'emploi et produit une short list classée (à rencontrer / à creuser / écarté) avec score, indice de cohérence, points forts, réserves et questions d'entretien. L'offre et les CV sont déposés directement dans la conversation. Détecte les CV alignés artificiellement sur l'offre (mots-clés plaqués, compétences sans expérience associée, anachronismes techniques) et peut exporter le rapport en PDF. Déclencher ce skill dès que l'utilisateur demande de "trier des CV", "faire une short list", "analyser des candidatures", "qui recevoir en entretien", "détecter les faux CV", ou toute variante de "voici une offre et des CV, aide-moi à choisir". Orienté profils d'ingénieurs en développement.
+description: Analyse un lot de CV face à une offre d'emploi et produit une short list classée (à rencontrer / à creuser / écarté) avec score, indice de cohérence, points forts, réserves, questions d'entretien et un tableau d'appréciation des compétences techniques de l'offre (hors sujet / peu pertinent / moyen / bien) pour chaque candidat. L'offre et les CV sont déposés directement dans la conversation. Détecte les CV alignés artificiellement sur l'offre (mots-clés plaqués, compétences sans expérience associée, anachronismes techniques) et peut exporter le rapport en PDF. Déclencher ce skill dès que l'utilisateur demande de "trier des CV", "faire une short list", "analyser des candidatures", "qui recevoir en entretien", "détecter les faux CV", ou toute variante de "voici une offre et des CV, aide-moi à choisir". Orienté profils d'ingénieurs en développement.
 license: MIT
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   author: "magic-manager-skills"
-  last-updated: "2026-08-18"
+  last-updated: "2026-08-19"
   repository: "https://github.com/saumon/magic-manager-skills"
 ---
 
@@ -103,17 +103,31 @@ ne vaut rien.
 
 ### 2. Extraire les must-have et les faire valider
 
-À partir de l'offre, extraire deux listes distinctes et les présenter à l'utilisateur :
+À partir de l'offre, extraire trois listes distinctes et les présenter à l'utilisateur :
 
 - **Must-have (éliminatoires)** : les exigences dont l'absence disqualifie
   mécaniquement le candidat (ex. « 5 ans minimum en Java », « habilitation défense »,
   « présence sur site 3 j/semaine », « anglais professionnel »).
 - **Nice-to-have** : ce qui valorise sans être bloquant.
+- **Compétences techniques de l'offre** : la liste des technologies, langages,
+  frameworks, outils et pratiques d'ingénierie cités par l'annonce (ex. « .NET Core »,
+  « T-SQL », « React.js », « CI/CD », « Messaging (Kafka, RabbitMQ, Solace) »). Cette
+  liste sert de référentiel au tableau « Appréciation des compétences techniques » de
+  l'étape 7. Règles d'extraction :
+  - **Conserver l'ordre d'apparition dans l'offre**, sans regrouper ni réordonner : le
+    tableau final devra présenter les compétences dans ce même ordre, qui reflète les
+    priorités de l'annonce.
+  - **Reprendre le libellé de l'offre**, y compris ses parenthèses d'exemples
+    (« Messaging (Kafka, RabbitMQ, Solace) » reste une seule ligne, pas trois).
+  - Une liste utile tient en **5 à 15 lignes**. Au-delà, proposer à l'utilisateur de
+    fusionner ou d'écarter les entrées les moins structurantes, sans le décider seul.
+  - Ne jamais ajouter une compétence absente de l'offre, même si elle paraît implicite.
 
 Présenter cette extraction sous forme de liste courte et **attendre la validation ou la
 correction de l'utilisateur avant de lire le moindre CV**. C'est lui qui tranche ce qui
 est réellement éliminatoire : une exigence écrite dans une annonce n'est pas toujours
-ferme dans les faits.
+ferme dans les faits. C'est lui également qui arrête la liste des compétences techniques
+et leur ordre : **la liste validée ici est figée pour tout le reste de l'analyse.**
 
 ### 3. Proposer la grille de notation et la faire ajuster
 
@@ -318,11 +332,51 @@ décroissant).
 L'indice de cohérence de l'étape 5 n'entre pas dans ce calcul : il est reporté tel quel
 dans la restitution.
 
+#### Apprécier chaque compétence technique de l'offre
+
+En plus du score, positionner **chaque** compétence de la liste validée à l'étape 2 sur
+un des quatre niveaux suivants. Ce classement alimente le tableau « Appréciation des
+compétences techniques » de l'étape 7, produit **pour tous les candidats, retenus comme
+écartés**.
+
+| Niveau | Ce qui le justifie |
+|---|---|
+| **Hors sujet** | Rien dans le CV : la compétence n'apparaît ni en liste, ni dans une expérience, et aucune technologie équivalente n'est pratiquée |
+| **Peu pertinent** | Simple mention (liste de compétences, formation, veille), exposition périphérique, usage très ancien ou anecdotique — rien qui démontre une pratique réelle |
+| **Moyen** | Pratiquée en contexte professionnel, mais partiellement : une seule expérience, périmètre limité, durée courte, ou usage non récent |
+| **Bien** | Pratiquée en contexte professionnel récent (3 dernières années), sur plusieurs expériences ou sur un projet d'ampleur où le rôle du candidat est explicite |
+
+Règles :
+
+- **Un seul niveau par compétence, jamais zéro ni deux.** Une compétence pour laquelle
+  le CV ne dit rien est « Hors sujet », pas une ligne vide.
+- **Une compétence orpheline plafonne à « Peu pertinent »** : si la technologie n'apparaît
+  que dans une liste sans expérience associée (signal de l'étape 5), elle ne peut pas
+  être notée « Moyen » ni « Bien ».
+- **La liste et son ordre ne bougent pas d'un candidat à l'autre** : mêmes lignes, même
+  ordre que l'offre, pour que les tableaux se comparent d'un coup d'œil. Ne jamais trier
+  par niveau, ne jamais masquer les lignes « Hors sujet ».
+- **Ce tableau ne modifie pas le score** : il détaille le critère « adéquation stack »
+  sans le remplacer. Il doit toutefois rester **cohérent** avec lui — un candidat dont
+  toutes les compétences sont « Hors sujet » ou « Peu pertinent » ne peut pas être au
+  palier « pleinement démontré » sur la stack, et inversement. En cas de contradiction,
+  reprendre les deux jusqu'à ce qu'elles concordent.
+- Le niveau retenu doit pouvoir être justifié par un élément du CV : en cas d'hésitation
+  entre deux niveaux, retenir le plus bas et le signaler dans les réserves.
+
 ### 7. Produire la short list
 
 Répondre dans le fil de discussion, dans la langue de l'utilisateur (français par
 défaut). **Cinq blocs, dans cet ordre.** Ne jamais commencer la restitution par le
 tableau : le bloc a) le précède toujours.
+
+**Règle stricte : la restitution dans le chat est intégralement en Markdown, jamais en
+HTML.** Aucune balise (`<table>`, `<colgroup>`, `<td>`, `<br>`…) ne doit apparaître dans
+le fil de discussion : l'interface affiche le code source tel quel et la réponse devient
+un pavé de balises illisible. Les gabarits HTML de l'étape 8 ne concernent **que** le
+fichier intermédiaire converti en PDF, jamais un message du chat. Cette règle vaut pour
+les cinq blocs, en particulier pour le tableau de synthèse et les tableaux
+d'appréciation des compétences.
 
 **a) Cadre de l'analyse** — bloc obligatoire, produit intégralement même si aucun signal
 de cohérence n'a été levé sur le lot. Il rend le classement relisible à froid et empêche
@@ -342,6 +396,14 @@ qualité d'ingénierie {x} — sur 100, selon le barème à quatre paliers (100 
 **Catégories** : à rencontrer (≥ 70) · à creuser (45-69) · écarté (< 45 ou must-have
 non satisfait).
 
+**Appréciation des compétences techniques** : chaque candidat est accompagné d'un tableau
+reprenant, dans l'ordre de l'offre, les compétences techniques attendues — {liste
+validée à l'étape 2} — positionnées sur quatre niveaux : **hors sujet** (rien dans le
+CV), **peu pertinent** (simple mention, sans pratique démontrée), **moyen** (pratiquée
+en contexte professionnel, mais partiellement) et **bien** (pratiquée récemment, sur
+plusieurs expériences ou un projet d'ampleur). Ce tableau détaille le critère de stack,
+il **ne s'ajoute pas au score**.
+
 **Indice de cohérence** : mesure la crédibilité du CV au regard de son propre contenu,
 **et non** la qualité du candidat ni son adéquation à l'offre. Six signaux sont
 recherchés — compétence orpheline, placage de mots-clés de l'offre, anachronisme
@@ -352,7 +414,10 @@ citation d'un extrait du CV. Paliers : **élevée** = 0 signal, **moyenne** = 1 
 s'affiche à côté d'eux comme un second axe de lecture.
 ```
 
-**b) Tableau de synthèse** — toutes catégories confondues, dans l'ordre de classement :
+**b) Tableau de synthèse** — toutes catégories confondues, dans l'ordre de classement.
+Dans le chat, il s'écrit en **tableau Markdown**, sans aucune balise : les largeurs de
+colonnes et le `<colgroup>` de l'étape 8 sont des contraintes de mise en page du PDF,
+sans objet ici.
 
 | # | Candidat | Fichier | Score | Cohérence | Catégorie | Verdict en une ligne |
 |---|---|---|---|---|---|---|
@@ -378,6 +443,13 @@ must-have manquant pour un candidat écarté.
 _Fichier : {nom du fichier} · Confiance de l'analyse : élevée / moyenne / faible_
 _Détail : stack {x}/35 · séniorité {x}/25 · projets {x}/25 · qualité {x}/15_
 
+**Appréciation des compétences techniques**
+
+| Compétence | Hors sujet | Peu pertinent | Moyen | Bien |
+|---|:---:|:---:|:---:|:---:|
+| {compétence 1 de l'offre} | ○ | ○ | ● | ○ |
+| {compétence 2 de l'offre} | ○ | ○ | ○ | ● |
+
 **Points forts**
 - {2 à 3 puces, chacune rattachée à une exigence de l'offre}
 
@@ -390,6 +462,21 @@ _Détail : stack {x}/35 · séniorité {x}/25 · projets {x}/25 · qualité {x}/
 **À vérifier en entretien**
 - {1 à 3 questions concrètes qui lèvent précisément les réserves et les signaux ci-dessus}
 ```
+
+**Tableau « Appréciation des compétences techniques »** — rendu commun aux blocs c) et
+d), donc produit **pour chaque candidat du lot, retenu comme écarté**, y compris ceux
+recalés sur un must-have. Règles de rendu dans le fil de discussion :
+
+- Une ligne par compétence de la liste validée à l'étape 2, **dans l'ordre de l'offre**,
+  aucune ligne en plus, aucune en moins.
+- Les quatre colonnes sont toujours les mêmes et dans cet ordre : **Hors sujet · Peu
+  pertinent · Moyen · Bien**.
+- Le niveau retenu est marqué `●`, les trois autres `○`. **Exactement un `●` par ligne** :
+  une ligne sans `●` ou avec deux est une erreur à corriger avant d'envoyer la réponse.
+- Ne pas commenter chaque ligne dans le tableau : ce qui mérite explication va dans les
+  points forts, les réserves ou le motif de refus.
+- Pour un CV illisible (rubrique « à traiter manuellement »), ne pas produire de tableau :
+  écrire que l'appréciation n'a pas pu être établie.
 
 **d) Candidats écartés** — **bloc obligatoire dès qu'au moins un candidat est écarté**,
 intitulé « Candidats écartés (must-have non satisfait) », produit aussi bien dans le chat
@@ -404,12 +491,21 @@ classement :
 - **{Nom}** — _{nom du fichier}_ · {score}/100 ou — si must-have non satisfait
   **Motif** : {must-have manquant, formulé tel qu'il a été validé à l'étape 2}
   **Constat dans le CV** : {le fait précis qui fonde le motif, cité ou résumé}
+
+  | Compétence | Hors sujet | Peu pertinent | Moyen | Bien |
+  |---|:---:|:---:|:---:|:---:|
+  | {compétence 1 de l'offre} | ● | ○ | ○ | ○ |
+  | {compétence 2 de l'offre} | ○ | ● | ○ | ○ |
 ```
 
 Règles :
 
 - **Un motif par candidat au minimum**, factuel et rattaché soit à un must-have validé,
   soit au score. « Profil non retenu » n'est pas un motif.
+- **Le tableau d'appréciation des compétences techniques est obligatoire ici aussi**,
+  avec les mêmes lignes et le même ordre que pour les candidats retenus. C'est ce qui
+  permet à l'utilisateur de vérifier qu'un refus ne tient pas à une lecture trop rapide,
+  et de répondre à un candidat ou à un intermédiaire sur ce qui manquait précisément.
 - Si plusieurs must-have manquent, les lister tous : l'utilisateur doit voir si le refus
   tient à un point unique et négociable ou à un écart de fond.
 - Un candidat écarté sur le **score** (< 45) et non sur un must-have est listé dans la
@@ -478,9 +574,10 @@ Si l'utilisateur accepte :
   l'analyse, tableau de synthèse, fiches détaillées, candidats écartés, récapitulatif
   cohérence), précédée d'un titre reprenant l'intitulé du poste et de la date d'analyse.
   **Aucune de ces sections ne peut être omise du PDF** — en particulier « Candidats
-  écartés (must-have non satisfait) », qui porte la justification des refus. **N'ajouter
-  aucune information qui ne figurait pas dans le chat** : le PDF est une mise en forme,
-  pas une nouvelle analyse.
+  écartés (must-have non satisfait) », qui porte la justification des refus, et le
+  **tableau d'appréciation des compétences techniques de chaque candidat**, retenus comme
+  écartés. **N'ajouter aucune information qui ne figurait pas dans le chat** : le PDF est
+  une mise en forme, pas une nouvelle analyse.
 - **Rappel méthodologique obligatoire** : le rapport reprend intégralement le bloc a)
   « Cadre de l'analyse », poids, must-have et **définition de l'indice de cohérence avec
   ses six signaux et ses paliers**. C'est encore plus critique que dans le chat : le PDF
@@ -508,12 +605,34 @@ Si l'utilisateur accepte :
 
 #### Règles de mise en page du PDF
 
-Le PDF est un document imprimable, pas une page web réduite. Trois exigences.
+Le PDF est un document imprimable, pas une page web réduite. Quatre exigences.
 
 **1. Marges resserrées.** Les marges par défaut des convertisseurs (souvent 25 mm et
 plus) amputent la largeur utile et forcent le tableau à se comprimer. Utiliser
 **12 mm en haut/bas et 10 mm à gauche/droite** sur A4, et ne pas ajouter de marge
 supplémentaire sur le conteneur du contenu.
+
+- La règle `@page` de `assets/report.css` ne suffit pas : **beaucoup de convertisseurs
+  l'ignorent** et appliquent la marge passée en option, quand ce n'est pas leur valeur
+  par défaut. **Passer les marges explicitement en ligne de commande**, en plus de la
+  feuille de style :
+  - `wkhtmltopdf` : `-T 12mm -B 12mm -L 10mm -R 10mm`
+  - `markdown-pdf` : `--paper-border 10mm` (option `border` en API)
+  - Chrome / Chromium headless, Puppeteer, Playwright :
+    `--margin-top=12mm --margin-bottom=12mm --margin-left=10mm --margin-right=10mm`,
+    avec l'impression des fonds activée (`printBackground`) — sans elle, les cellules
+    du tableau d'appréciation ressortent toutes blanches.
+  - `pandoc` vers LaTeX :
+    `-V geometry:a4paper -V geometry:top=12mm,bottom=12mm,left=10mm,right=10mm`
+  - `weasyprint` : rien à passer, `@page` est respecté.
+- **Ne pas laisser le contenu dans un conteneur à `max-width`.** Les thèmes Markdown
+  usuels enveloppent le document dans un bloc à largeur maximale et à padding large ;
+  ce padding s'ajoute aux marges de page. `report.css` neutralise les conteneurs les plus
+  courants, mais si le convertisseur en utilise un autre, le neutraliser à son tour.
+- **Contrôle visuel** : sur la page rendue, le texte courant doit courir d'un bord à
+  l'autre de la zone imprimable. S'il n'occupe qu'environ les deux tiers de la largeur,
+  les marges n'ont pas été prises en compte : reprendre les options ci-dessus et
+  régénérer plutôt que de livrer un rapport tassé.
 
 **2. Aucun défilement horizontal dans le tableau de synthèse.** Un tableau qui déborde
 produit une barre de défilement dans les visionneuses et du texte tronqué à
@@ -533,11 +652,12 @@ l'impression : c'est un export raté, à refaire. Contraintes :
   alors que « Score » ou « Catégorie » n'ont rien à faire de l'espace qu'on leur donne.
   Les en-têtes des colonnes étroites ont le droit de se replier sur deux lignes.
 - **Écrire le tableau de synthèse du PDF directement en HTML, avec un `<colgroup>` et des
-  largeurs en ligne**, plutôt qu'en tableau Markdown converti. C'est le seul moyen fiable
-  d'imposer les largeurs : les feuilles de style par défaut des convertisseurs posent
-  souvent leurs propres largeurs, qui l'emportent, et le moteur retombe alors sur une
-  répartition par contenu — celle qui donne des colonnes « Score » ou « Cohérence » aussi
-  larges que le verdict. Gabarit :
+  largeurs en ligne**, plutôt qu'en tableau Markdown converti — **dans le fichier source
+  de la conversion uniquement, jamais dans un message du chat** (voir la règle stricte de
+  l'étape 7). C'est le seul moyen fiable d'imposer les largeurs : les feuilles de style
+  par défaut des convertisseurs posent souvent leurs propres largeurs, qui l'emportent,
+  et le moteur retombe alors sur une répartition par contenu — celle qui donne des
+  colonnes « Score » ou « Cohérence » aussi larges que le verdict. Gabarit :
 
   ```html
   <table>
@@ -575,12 +695,53 @@ l'impression : c'est un export raté, à refaire. Contraintes :
   Ne pas descendre en dessous pour faire tenir le document sur moins de pages : un
   rapport de tri se relit à froid, la pagination compte moins que la lisibilité.
 
+**4. Tableaux d'appréciation des compétences techniques.** Dans le PDF, ces tableaux ne
+se rendent pas avec des `○` / `●` comme dans le chat : ils reprennent l'aspect d'un
+sélecteur à quatre segments — libellé de la compétence aligné à droite, puis les quatre
+niveaux côte à côte, celui qui est retenu étant seul mis en évidence. Contraintes :
+
+- **Écrire ces tableaux en HTML**, avec la classe `competences`, sans ligne d'en-tête :
+  les quatre libellés sont répétés sur chaque ligne, comme dans un formulaire. Là encore,
+  ce HTML n'existe que dans le fichier source converti en PDF — dans le chat, le tableau
+  reste en Markdown avec ses `○` / `●`. La feuille de style `assets/report.css` porte
+  toute la mise en forme.
+- Chaque cellule de niveau porte la classe `opt`. La cellule retenue porte **en plus**
+  `sel` et la classe de son niveau : `lv-hs` (hors sujet), `lv-pp` (peu pertinent),
+  `lv-my` (moyen), `lv-bn` (bien).
+- **Exactement une cellule `sel` par ligne.** Zéro ou deux est un export raté.
+- Ne pas réordonner les lignes ni les colonnes : ordre de l'offre pour les lignes, ordre
+  hors sujet → peu pertinent → moyen → bien pour les colonnes.
+- Gabarit :
+
+  ```html
+  <table class="competences">
+    <colgroup>
+      <col style="width:32%"><col style="width:17%"><col style="width:17%">
+      <col style="width:17%"><col style="width:17%">
+    </colgroup>
+    <tbody>
+      <tr>
+        <td class="skill">.NET Core</td>
+        <td class="opt">Hors sujet</td>
+        <td class="opt">Peu pertinent</td>
+        <td class="opt sel lv-my">Moyen</td>
+        <td class="opt">Bien</td>
+      </tr>
+      <!-- une ligne par compétence de l'offre, dans l'ordre de l'offre -->
+    </tbody>
+  </table>
+  ```
+
 **Vérification obligatoire avant livraison** : ouvrir ou re-rendre le PDF produit et
-contrôler deux points sur le tableau de synthèse — la dernière colonne est entièrement
-visible sur la page, et la colonne « Verdict » occupe bien plus de la moitié de la
-largeur du tableau. Si l'un des deux échoue, les largeurs n'ont pas été prises en compte :
-basculer le tableau en HTML avec `<colgroup>` et régénérer — ne jamais livrer en signalant
-simplement le problème.
+contrôler quatre points — le texte occupe toute la largeur imprimable, sans bande blanche
+d'un tiers de page sur les côtés ; sur le tableau de synthèse, la dernière colonne est
+entièrement visible sur la page et la colonne « Verdict » occupe bien plus de la moitié
+de la largeur du tableau ; sur chaque tableau d'appréciation, une seule cellule par ligne
+est mise en évidence et les libellés des quatre niveaux tiennent sans être tronqués. Si
+l'un de ces points échoue, les options de conversion ou les styles n'ont pas été pris en
+compte : repasser les marges en ligne de commande, basculer le tableau concerné en HTML
+(avec `<colgroup>` pour la synthèse, avec les classes `opt` / `sel` pour les compétences)
+et régénérer — ne jamais livrer en signalant simplement le problème.
 
 ## Points de vigilance
 

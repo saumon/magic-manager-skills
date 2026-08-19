@@ -4,6 +4,64 @@ Toutes les versions notables de ce skill sont documentées ici. Le format
 suit [Keep a Changelog](https://keepachangelog.com/), et le versionnement
 suit [semver](https://semver.org/) (MAJOR.MINOR.PATCH).
 
+## [1.2.0] - 2026-08-19
+
+### Ajouté
+
+- Tableau **« Appréciation des compétences techniques »** pour **chaque candidat**,
+  retenus comme écartés, dans le fil de discussion et dans le PDF. Chaque
+  compétence technique listée dans l'offre y est positionnée sur un des quatre
+  niveaux **hors sujet / peu pertinent / moyen / bien**, dans l'ordre exact de
+  l'offre. Le tableau détaille le critère d'adéquation stack mais **ne modifie
+  pas le score**.
+- Extraction, à l'étape 2, d'une troisième liste soumise à validation : les
+  **compétences techniques de l'offre**, libellés repris tels quels et ordre
+  d'apparition conservé. Cette liste validée est figée pour tout le reste de
+  l'analyse et sert de référentiel commun à tous les candidats — mêmes lignes,
+  même ordre, aucune ligne masquée, y compris les « hors sujet ».
+- Barème d'attribution des quatre niveaux à l'étape 6, avec la règle
+  d'exactement un niveau par compétence, le plafonnement à « peu pertinent »
+  des compétences orphelines (technologie listée sans expérience associée) et
+  l'exigence de cohérence avec le palier retenu sur la stack.
+- Rendu du tableau décrit pour les deux sorties : `○` / `●` dans le chat, et
+  sélecteur à quatre segments dans le PDF (libellé aligné à droite, quatre
+  niveaux accolés, seul le niveau retenu mis en évidence), avec son gabarit HTML
+  et les classes correspondantes.
+- Styles `table.competences` dans `assets/report.css` : segments accolés aux
+  coins arrondis, niveau retenu coloré selon le palier (`lv-hs`, `lv-pp`,
+  `lv-my`, `lv-bn`) et mis en gras pour rester lisible à l'impression noir et
+  blanc.
+- Définition des quatre niveaux ajoutée au bloc « Cadre de l'analyse », pour
+  que le PDF reste interprétable quand il circule seul.
+
+### Modifié
+
+- La vérification obligatoire avant livraison du PDF porte désormais sur trois
+  points au lieu de deux : les deux contrôles du tableau de synthèse, plus
+  l'unicité de la cellule mise en évidence et la non-troncature des libellés
+  dans chaque tableau d'appréciation.
+- Les règles de largeur de colonnes de `report.css` sont scopées en
+  `table:not(.competences)` : elles visaient tous les tableaux et auraient
+  écrasé la mise en forme du nouveau tableau.
+
+### Corrigé
+
+- Le PDF sortait avec des marges bien plus larges que les 12 / 10 mm annoncés,
+  le contenu tassé sur les deux tiers de la largeur et le tableau de synthèse
+  comprimé : la règle `@page` de `report.css` était ignorée par le
+  convertisseur, et le conteneur du thème Markdown ajoutait son propre padding.
+  La feuille de style neutralise désormais `max-width` et padding des
+  conteneurs usuels, et l'étape 8 impose de passer les marges explicitement en
+  option de conversion (`wkhtmltopdf`, `markdown-pdf`, Chrome headless,
+  `pandoc`), avec un contrôle visuel de la largeur utile avant livraison.
+- Le tableau de synthèse s'affichait dans le chat comme un bloc de balises
+  brutes (`<table>`, `<colgroup>`, `<td>`…) : la consigne d'écrire ce tableau
+  en HTML, introduite en 1.1.0 pour la seule mise en page du PDF, était
+  appliquée à la restitution du fil de discussion. L'étape 7 pose désormais la
+  règle stricte d'une restitution **intégralement en Markdown, sans aucune
+  balise HTML**, et les gabarits HTML de l'étape 8 sont explicitement
+  cantonnés au fichier source converti en PDF.
+
 ## [1.1.0] - 2026-08-18
 
 ### Ajouté
