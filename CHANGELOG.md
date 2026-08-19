@@ -6,6 +6,11 @@ de skills). L'historique détaillé de chaque skill vit dans son propre
 
 ## 2026-08-19
 
+- `resume-shortlist` passe en v1.3.0 : prise en charge des CV au format
+  Markdown (`.md`), en plus du PDF et du Word (`.docx`) déjà supportés. Un CV
+  Markdown est par nature toujours exploitable, il ne peut pas tomber dans la
+  rubrique « à traiter manuellement » pour un motif de lisibilité. Voir
+  [skills/resume-shortlist/CHANGELOG.md](skills/resume-shortlist/CHANGELOG.md).
 - Ajout du skill `resume-to-markdown` v1.0.0 : conversion d'un CV PDF ou Word
   (`.docx`) en fichier Markdown par dépouillement de forme — photo, images,
   logos, icônes, couleurs, colonnes et jauges disparaîssent, l'intégralité du

@@ -85,7 +85,7 @@ destinataire via Microsoft Teams. Nécessite les MCP Notion et Kommunicator.
 Voir [`skills/notion-debrief/SKILL.md`](skills/notion-debrief/SKILL.md) et
 son [`CHANGELOG.md`](skills/notion-debrief/CHANGELOG.md).
 
-### resume-shortlist — v1.2.0
+### resume-shortlist — v1.3.0
 
 Analyse un lot de CV face à une offre d'emploi (texte collé ou fichier PDF) et
 produit une short list classée (à rencontrer / à creuser / écarté) avec score,
@@ -93,12 +93,12 @@ indice de cohérence, points forts, réserves et questions d'entretien. Chaque
 candidat, retenu comme écarté, est accompagné d'un tableau « Appréciation des
 compétences techniques » qui positionne chaque compétence de l'offre, dans son
 ordre, sur quatre niveaux (hors sujet / peu pertinent / moyen / bien). L'offre
-et les CV sont déposés directement dans la conversation. Détecte les CV
-alignés artificiellement sur l'offre (mots-clés plaqués, compétences sans
-expérience associée, anachronismes techniques), rappelle sa méthode de calcul
-dans le rapport et peut l'exporter en PDF (marges resserrées et tableau de
-synthèse sans débordement, via `assets/report.css`). Orienté profils
-d'ingénieurs en développement.
+et les CV sont déposés directement dans la conversation, les CV au format PDF,
+Word (`.docx`) ou Markdown (`.md`). Détecte les CV alignés artificiellement sur
+l'offre (mots-clés plaqués, compétences sans expérience associée, anachronismes
+techniques), rappelle sa méthode de calcul dans le rapport et peut l'exporter
+en PDF (marges resserrées et tableau de synthèse sans débordement, via
+`assets/report.css`). Orienté profils d'ingénieurs en développement.
 Voir [`skills/resume-shortlist/SKILL.md`](skills/resume-shortlist/SKILL.md)
 et son [`CHANGELOG.md`](skills/resume-shortlist/CHANGELOG.md).
 
