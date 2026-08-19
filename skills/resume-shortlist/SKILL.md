@@ -1,9 +1,9 @@
 ---
 name: resume-shortlist
-description: Analyse un lot de CV face à une offre d'emploi et produit une short list classée (à rencontrer / à creuser / écarté) avec score, indice de cohérence, points forts, réserves, questions d'entretien et un tableau d'appréciation des compétences techniques de l'offre (hors sujet / peu pertinent / moyen / bien) pour chaque candidat. L'offre et les CV sont déposés directement dans la conversation. Détecte les CV alignés artificiellement sur l'offre (mots-clés plaqués, compétences sans expérience associée, anachronismes techniques) et peut exporter le rapport en PDF. Déclencher ce skill dès que l'utilisateur demande de "trier des CV", "faire une short list", "analyser des candidatures", "qui recevoir en entretien", "détecter les faux CV", ou toute variante de "voici une offre et des CV, aide-moi à choisir". Orienté profils d'ingénieurs en développement.
+description: Analyse un lot de CV (PDF, Word ou Markdown) face à une offre d'emploi et produit une short list classée (à rencontrer / à creuser / écarté) avec score, indice de cohérence, points forts, réserves, questions d'entretien et un tableau d'appréciation des compétences techniques de l'offre (hors sujet / peu pertinent / moyen / bien) pour chaque candidat. L'offre et les CV sont déposés directement dans la conversation. Détecte les CV alignés artificiellement sur l'offre (mots-clés plaqués, compétences sans expérience associée, anachronismes techniques) et peut exporter le rapport en PDF. Déclencher ce skill dès que l'utilisateur demande de "trier des CV", "faire une short list", "analyser des candidatures", "qui recevoir en entretien", "détecter les faux CV", ou toute variante de "voici une offre et des CV, aide-moi à choisir". Orienté profils d'ingénieurs en développement.
 license: MIT
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
   author: "magic-manager-skills"
   last-updated: "2026-08-19"
   repository: "https://github.com/saumon/magic-manager-skills"
@@ -21,8 +21,8 @@ et les questions d'entretien sont calibrés pour ces profils.
 ## Prérequis
 
 - **Les documents sont déposés dans la conversation** (glisser-déposer ou pièce jointe) :
-  l'offre en PDF si elle n'est pas collée en texte, et les CV en PDF ou DOCX. Ne jamais
-  demander de chemin de fichier ni de dossier.
+  l'offre en PDF si elle n'est pas collée en texte, et les CV en PDF, DOCX ou Markdown
+  (`.md`). Ne jamais demander de chemin de fichier ni de dossier.
 - Aucun MCP requis.
 - Pour l'export PDF optionnel de l'étape 8 uniquement : possibilité d'écrire un fichier
   et un convertisseur disponible (voir cette étape). La feuille de style de mise en page
@@ -179,9 +179,10 @@ retenir le plus bas et le mentionner dans les réserves du candidat.
 
 **C'est seulement à ce stade que les CV sont demandés**, une fois l'offre lue, les
 must-have validés et la grille arrêtée. Demander à l'utilisateur de **déposer les CV dans
-la conversation** (PDF ou DOCX), de préférence en une seule fois. Ne jamais demander un
-chemin de dossier. Récapituler les fichiers reçus et **annoncer le nombre de CV détectés
-avant l'analyse**, pour que l'utilisateur puisse confirmer qu'aucun ne manque.
+la conversation** (PDF, DOCX ou Markdown), de préférence en une seule fois. Ne jamais
+demander un chemin de dossier. Récapituler les fichiers reçus et **annoncer le nombre de
+CV détectés avant l'analyse**, pour que l'utilisateur puisse confirmer qu'aucun ne
+manque.
 
 Si l'utilisateur a déposé des CV plus tôt, de sa propre initiative, ne pas les analyser
 avant d'être arrivé à cette étape : dérouler d'abord les étapes 1 à 3, puis confirmer avec
@@ -201,9 +202,10 @@ Points de vigilance en lecture :
   deux versions du même CV). Les rattacher à une seule fiche candidat plutôt que de
   créer des doublons. Si deux versions divergent, retenir la plus récente et **signaler
   la divergence** à l'utilisateur.
-- Un CV **non lisible** (PDF image, fichier corrompu, format non supporté) n'est jamais
-  écarté par défaut : il est placé dans une rubrique séparée « à traiter manuellement »
-  avec la raison technique.
+- Un CV **non lisible** (PDF image sans couche texte, fichier corrompu, format non
+  supporté) n'est jamais écarté par défaut : il est placé dans une rubrique séparée
+  « à traiter manuellement » avec la raison technique. Un CV Markdown, par nature, ne
+  pose jamais ce problème : le texte y est toujours exploitable directement.
 - Distinguer ce que le candidat a **fait** de ce qu'il a **côtoyé** : « projet utilisant
   Kubernetes » ne signifie pas « sait opérer Kubernetes ».
 - Ne pas pénaliser un CV court ou sobre en tant que tel : évaluer le fond. En revanche,

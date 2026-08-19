@@ -4,6 +4,23 @@ Toutes les versions notables de ce skill sont documentées ici. Le format
 suit [Keep a Changelog](https://keepachangelog.com/), et le versionnement
 suit [semver](https://semver.org/) (MAJOR.MINOR.PATCH).
 
+## [1.3.0] - 2026-08-19
+
+### Ajouté
+
+- Prise en charge des CV au **format Markdown (`.md`)**, en plus du PDF et du
+  DOCX déjà supportés. À l'étape 4, la demande de dépôt des CV mentionne
+  désormais les trois formats. Un CV Markdown est par nature toujours
+  exploitable : il ne peut pas tomber dans la rubrique « à traiter
+  manuellement » pour un motif de lisibilité (contrairement à un PDF image ou
+  un fichier corrompu).
+
+### Modifié
+
+- Le frontmatter (`description`) et les prérequis précisent désormais les
+  trois formats de CV acceptés (PDF, Word, Markdown) au lieu de PDF/DOCX
+  uniquement.
+
 ## [1.2.0] - 2026-08-19
 
 ### Ajouté
