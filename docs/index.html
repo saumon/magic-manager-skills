@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>magic-manager-skills — Des skills Claude pour Engineering Managers</title>
-<meta name="description" content="Mono-repo open source de skills Claude pour l'automatisation de tâches de management : débriefing Notion vers Teams, tri de CV. Pensé pour une stack Microsoft Teams (MCP Kommunicator) et Notion.">
+<meta name="description" content="Mono-repo open source de skills Claude pour l'automatisation de tâches de management : débriefing Notion vers Teams, tri de CV, conversion de CV en Markdown. Pensé pour une stack Microsoft Teams (MCP Kommunicator) et Notion.">
 <meta name="theme-color" content="#0b0e14">
 <meta name="color-scheme" content="dark">
 <meta property="og:type" content="website">
 <meta property="og:title" content="magic-manager-skills — Des skills Claude pour Engineering Managers">
-<meta property="og:description" content="Des workflows de management transformés en skills Claude versionnés : débriefing Notion vers Teams, tri de CV. Open source, licence MIT.">
+<meta property="og:description" content="Des workflows de management transformés en skills Claude versionnés : débriefing Notion vers Teams, tri de CV, conversion de CV en Markdown. Open source, licence MIT.">
 <meta property="og:url" content="https://saumon.github.io/magic-manager-skills/">
 <meta property="og:image" content="https://saumon.github.io/magic-manager-skills/assets/images/magicmanagerskills-logo.png">
 <meta property="og:image:alt" content="Logo magic-manager-skills : un magicien à lunettes, baguette dans une main et ordinateur portable dans l'autre">
@@ -414,7 +414,7 @@ footer nav { display: flex; flex-wrap: wrap; gap: 1.5rem; }
           skills Claude versionnés, réutilisables et partageables.
         </p>
         <ul class="badges">
-          <li>2 skills</li>
+          <li>3 skills</li>
           <li>MCP Notion</li>
           <li>MCP Kommunicator</li>
           <li>100 % français</li>
@@ -542,7 +542,7 @@ footer nav { display: flex; flex-wrap: wrap; gap: 1.5rem; }
   <section id="skills" class="reveal">
     <div class="wrap">
       <p class="section-tag">Skills disponibles</p>
-      <h2>Deux workflows prêts à l'emploi</h2>
+      <h2>Trois workflows prêts à l'emploi</h2>
       <p class="lead">
         Chaque skill vit dans son propre dossier sous <code>skills/</code>, avec son
         <code>SKILL.md</code>, son changelog et ses éventuelles ressources.
@@ -591,6 +591,30 @@ footer nav { display: flex; flex-wrap: wrap; gap: 1.5rem; }
           <div class="card-links">
             <a href="https://github.com/saumon/magic-manager-skills/blob/dev/skills/resume-shortlist/SKILL.md" target="_blank" rel="noopener noreferrer">SKILL.md ↗</a>
             <a href="https://github.com/saumon/magic-manager-skills/blob/dev/skills/resume-shortlist/CHANGELOG.md" target="_blank" rel="noopener noreferrer">Changelog ↗</a>
+          </div>
+        </article>
+        <article class="card skill-card">
+          <div class="skill-head">
+            <h3>resume-to-markdown</h3>
+            <span class="version">v1.0.0</span>
+          </div>
+          <p>
+            Transforme un CV PDF ou Word en fichier Markdown, par dépouillement de forme :
+            photo, logos, icônes, couleurs, colonnes et jauges disparaîssent, mais aucune
+            information textuelle n'est écartée. Ni résumé ni réécriture : l'ordre du
+            document source est conservé à l'identique. Le fichier produit porte le même
+            nom que la source (<code>cv-toto.pdf</code> → <code>cv-toto.md</code>) et sert
+            à alimenter <code>resume-shortlist</code> avec des CV allégés.
+          </p>
+          <ul class="tags">
+            <li>Aucun MCP</li>
+            <li>PDF</li>
+            <li>Word</li>
+            <li>Markdown</li>
+          </ul>
+          <div class="card-links">
+            <a href="https://github.com/saumon/magic-manager-skills/blob/dev/skills/resume-to-markdown/SKILL.md" target="_blank" rel="noopener noreferrer">SKILL.md ↗</a>
+            <a href="https://github.com/saumon/magic-manager-skills/blob/dev/skills/resume-to-markdown/CHANGELOG.md" target="_blank" rel="noopener noreferrer">Changelog ↗</a>
           </div>
         </article>
       </div>

@@ -5,7 +5,7 @@
 <p align="center">
   <a href="https://saumon.github.io/magic-manager-skills/"><img alt="Landing page" src="https://img.shields.io/badge/landing%20page-en%20ligne-7c8cff?style=flat-square&logo=githubpages&logoColor=white"></a>
   <a href="LICENSE"><img alt="Licence MIT" src="https://img.shields.io/github/license/saumon/magic-manager-skills?style=flat-square&color=4fd1c5"></a>
-  <img alt="Skills disponibles" src="https://img.shields.io/badge/skills-2-7c8cff?style=flat-square">
+  <img alt="Skills disponibles" src="https://img.shields.io/badge/skills-3-7c8cff?style=flat-square">
   <img alt="Claude Skills" src="https://img.shields.io/badge/Claude-Skills-d97757?style=flat-square&logo=anthropic&logoColor=white">
   <img alt="MCP requis" src="https://img.shields.io/badge/MCP-Notion%20%7C%20Kommunicator-4fd1c5?style=flat-square">
   <img alt="Langue : français" src="https://img.shields.io/badge/langue-fran%C3%A7ais-7c8cff?style=flat-square">
@@ -40,11 +40,14 @@ magic-manager-skills/
     │   ├── CHANGELOG.md
     │   └── assets/
     │       └── adaptive_card_template.json
-    └── resume-shortlist/
+    ├── resume-shortlist/
+    │   ├── SKILL.md
+    │   ├── CHANGELOG.md
+    │   └── assets/
+    │       └── report.css
+    └── resume-to-markdown/
         ├── SKILL.md
-        ├── CHANGELOG.md
-        └── assets/
-            └── report.css
+        └── CHANGELOG.md
 ```
 
 Chaque skill vit dans son propre sous-dossier sous `skills/`, avec son
@@ -98,6 +101,22 @@ synthèse sans débordement, via `assets/report.css`). Orienté profils
 d'ingénieurs en développement.
 Voir [`skills/resume-shortlist/SKILL.md`](skills/resume-shortlist/SKILL.md)
 et son [`CHANGELOG.md`](skills/resume-shortlist/CHANGELOG.md).
+
+### resume-to-markdown — v1.0.0
+
+Convertit un CV au format PDF ou Word (`.docx`) en fichier Markdown, par
+**dépouillement de forme** : photo, images, logos, icônes, couleurs, colonnes,
+encadrés et jauges de compétences disparaîssent, mais **aucune information
+textuelle n'est écartée**, y compris celles qui paraissent accessoires. Ce n'est
+ni un résumé ni une réécriture : rien n'est reformulé, rien n'est inventé, et la
+structure du `.md` suit l'ordre exact du document source, sans gabarit imposé.
+Le fichier produit reprend à l'identique le nom du fichier source, seule
+l'extension devient `.md` (`cv-toto.pdf` → `cv-toto.md`) ; si ce nom n'est pas
+connu avec certitude, le skill le demande plutôt que de le reconstituer. Le
+Markdown obtenu sert notamment à alimenter `resume-shortlist`, dont le
+traitement bute sur les CV chargés en images. Aucun MCP requis.
+Voir [`skills/resume-to-markdown/SKILL.md`](skills/resume-to-markdown/SKILL.md)
+et son [`CHANGELOG.md`](skills/resume-to-markdown/CHANGELOG.md).
 
 ## Versionnement
 
