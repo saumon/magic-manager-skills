@@ -1,6 +1,7 @@
 /* Feuille de style de l'export PDF du skill resume-shortlist.
    Objectifs : marges resserrées, tableau de synthèse intégralement visible
-   (aucun débordement horizontal, aucune barre de défilement), titres non
+   (aucun débordement horizontal, aucune barre de défilement), tableau
+   d'appréciation des compétences en sélecteur à quatre segments, titres non
    numérotés et fiches détaillées séparées par un filet. */
 
 @page {
@@ -8,9 +9,27 @@
   margin: 12mm 10mm;
 }
 
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+}
+
+/* La plupart des convertisseurs enveloppent le contenu dans un conteneur à
+   `max-width` et gros padding (thèmes type github-markdown-css) : ce padding
+   s'ajoute aux marges de @page et le rapport se retrouve tassé sur les deux
+   tiers de la largeur. */
+.markdown-body, .markdown-preview, .container, .content, .page,
+#content, #write, main, article {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+  box-sizing: border-box;
+}
+
 body {
-  margin: 0;
-  padding: 0;
   font-family: "DejaVu Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 10.5pt;
   line-height: 1.45;
@@ -85,30 +104,91 @@ tr { page-break-inside: avoid; }
    Les six premières sont resserrées au strict nécessaire pour laisser au
    verdict la plus grande part de la largeur utile.
    !important : beaucoup de thèmes Markdown posent leurs propres largeurs,
-   qui l'emportaient jusqu'ici et rendaient la colonne Verdict étroite. */
-table th:nth-child(1), table td:nth-child(1) { width: 3% !important; }
-table th:nth-child(2), table td:nth-child(2) { width: 11% !important; }
-table th:nth-child(3), table td:nth-child(3) { width: 10% !important; font-size: 7.5pt; }
-table th:nth-child(4), table td:nth-child(4) { width: 4% !important; }
-table th:nth-child(5), table td:nth-child(5) { width: 7% !important; }
-table th:nth-child(6), table td:nth-child(6) { width: 8% !important; }
-table th:nth-child(7), table td:nth-child(7) { width: 57% !important; }
+   qui l'emportaient jusqu'ici et rendaient la colonne Verdict étroite.
+   :not(.competences) : ces largeurs ne concernent pas le tableau
+   d'appréciation des compétences, qui a les siennes. */
+table:not(.competences) th:nth-child(1), table:not(.competences) td:nth-child(1) { width: 3% !important; }
+table:not(.competences) th:nth-child(2), table:not(.competences) td:nth-child(2) { width: 11% !important; }
+table:not(.competences) th:nth-child(3), table:not(.competences) td:nth-child(3) { width: 10% !important; font-size: 7.5pt; }
+table:not(.competences) th:nth-child(4), table:not(.competences) td:nth-child(4) { width: 4% !important; }
+table:not(.competences) th:nth-child(5), table:not(.competences) td:nth-child(5) { width: 7% !important; }
+table:not(.competences) th:nth-child(6), table:not(.competences) td:nth-child(6) { width: 8% !important; }
+table:not(.competences) th:nth-child(7), table:not(.competences) td:nth-child(7) { width: 57% !important; }
 
 /* Si le convertisseur ignore les sélecteurs nth-child, un <colgroup> dans le
    HTML intermédiaire porte les mêmes largeurs. */
-colgroup col:nth-child(1) { width: 3%; }
-colgroup col:nth-child(2) { width: 11%; }
-colgroup col:nth-child(3) { width: 10%; }
-colgroup col:nth-child(4) { width: 4%; }
-colgroup col:nth-child(5) { width: 7%; }
-colgroup col:nth-child(6) { width: 8%; }
-colgroup col:nth-child(7) { width: 57%; }
+table:not(.competences) colgroup col:nth-child(1) { width: 3%; }
+table:not(.competences) colgroup col:nth-child(2) { width: 11%; }
+table:not(.competences) colgroup col:nth-child(3) { width: 10%; }
+table:not(.competences) colgroup col:nth-child(4) { width: 4%; }
+table:not(.competences) colgroup col:nth-child(5) { width: 7%; }
+table:not(.competences) colgroup col:nth-child(6) { width: 8%; }
+table:not(.competences) colgroup col:nth-child(7) { width: 57%; }
 
 /* Colonnes courtes : en-têtes compacts, autorisés à se replier, et padding
    réduit pour ne pas gaspiller la largeur gagnée. */
 table th { font-size: 8pt; hyphens: none; }
-table th:nth-child(-n+6), table td:nth-child(-n+6) { padding: 1.2mm 1mm; }
-table td:nth-child(1), table td:nth-child(4) { text-align: center; }
+table:not(.competences) th:nth-child(-n+6), table:not(.competences) td:nth-child(-n+6) { padding: 1.2mm 1mm; }
+table:not(.competences) td:nth-child(1), table:not(.competences) td:nth-child(4) { text-align: center; }
+
+/* --- Appréciation des compétences techniques ----------------------------- */
+/* Rendu attendu : libellé de la compétence aligné à droite, puis quatre
+   segments accolés (hors sujet · peu pertinent · moyen · bien) dont un seul,
+   celui portant la classe .sel, est mis en évidence. Pas de ligne d'en-tête :
+   les quatre libellés sont répétés sur chaque ligne. */
+
+table.competences {
+  width: 100% !important;
+  table-layout: fixed !important;
+  border-collapse: separate;
+  border-spacing: 0 1.2mm;   /* respiration verticale entre les compétences */
+  font-size: 8.5pt;
+  margin: 1mm 0 4mm;
+}
+
+table.competences td {
+  border: 0;
+  padding: 0;
+  vertical-align: middle;
+  white-space: normal;
+  overflow-wrap: break-word;
+  hyphens: none;
+}
+
+/* Libellé de la compétence : aligné à droite, contre le premier segment. */
+table.competences td.skill {
+  width: 32%;
+  text-align: right;
+  padding-right: 2.5mm;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* Segment non retenu : cadre léger, texte atténué. */
+table.competences td.opt {
+  width: 17%;
+  text-align: center;
+  padding: 1.1mm 0.8mm;
+  border: 0.4pt solid #c8ccd4;
+  background: #fff;
+  color: #8a90a0;
+  font-size: 8pt;
+}
+
+/* Segments accolés : coins arrondis aux deux extrémités du groupe. */
+table.competences td.opt:nth-child(2) { border-radius: 1.2mm 0 0 1.2mm; }
+table.competences td.opt:last-child   { border-radius: 0 1.2mm 1.2mm 0; }
+
+/* Segment retenu : un seul par ligne. Le gras double la couleur, pour rester
+   lisible à l'impression en noir et blanc. */
+table.competences td.opt.sel { font-weight: 700; }
+table.competences td.opt.sel.lv-hs { background: #fdecea; border-color: #c5372c; color: #a02b21; }
+table.competences td.opt.sel.lv-pp { background: #fdf3e3; border-color: #c98a12; color: #8a5d05; }
+table.competences td.opt.sel.lv-my { background: #eaf1fb; border-color: #3b6fd4; color: #1f4fa8; }
+table.competences td.opt.sel.lv-bn { background: #e8f5ec; border-color: #2f8f52; color: #1b6e3c; }
+
+table.competences tr { page-break-inside: avoid; }
+
 
 /* --- Divers -------------------------------------------------------------- */
 
