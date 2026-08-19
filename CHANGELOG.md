@@ -6,6 +6,16 @@ de skills). L'historique détaillé de chaque skill vit dans son propre
 
 ## 2026-08-19
 
+- Ajout du skill `resume-to-markdown` v1.0.0 : conversion d'un CV PDF ou Word
+  (`.docx`) en fichier Markdown par dépouillement de forme — photo, images,
+  logos, icônes, couleurs, colonnes et jauges disparaîssent, l'intégralité du
+  contenu textuel est conservée, dans l'ordre exact du document source et sans
+  gabarit imposé. Le fichier produit reprend à l'identique le nom du fichier
+  source, seule l'extension devient `.md`, le nom exact étant demandé à
+  l'utilisateur plutôt que reconstitué quand il n'est pas connu. Destiné à
+  alimenter plus tard `resume-shortlist`, dont le traitement bute sur les CV
+  chargés en images. Voir
+  [skills/resume-to-markdown/CHANGELOG.md](skills/resume-to-markdown/CHANGELOG.md).
 - `resume-shortlist` passe en v1.2.0 : ajout d'un tableau « Appréciation des
   compétences techniques » pour chaque candidat, retenus comme écartés, dans la
   synthèse du chat comme dans le PDF. Chaque compétence listée dans l'offre y
