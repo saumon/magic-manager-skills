@@ -4,6 +4,62 @@ Toutes les versions notables de ce skill sont documentées ici. Le format
 suit [Keep a Changelog](https://keepachangelog.com/), et le versionnement
 suit [semver](https://semver.org/) (MAJOR.MINOR.PATCH).
 
+## [1.4.0] - 2026-08-20
+
+### Ajouté
+
+- Section **« Reproductibilité — deux analyses du même lot doivent concorder »**, qui
+  pose l'objectif (mêmes catégories, même ordre, scores à ±3 points) et les six règles
+  transverses : compter avant de juger, séparer la lecture de la notation, noter chaque
+  candidat isolément, ordre de traitement fixe, valeur la plus basse en cas
+  d'hésitation, aucune valeur hors barème.
+- **Relevé factuel** obligatoire à l'étape 4, produit avant toute note et restitué de
+  façon condensée dans le chat : nombre de compétences de l'offre pratiquées en contexte
+  professionnel, années sur missions comparables, projets à rôle explicite, pratiques
+  d'ingénierie citées en situation, statut de chaque must-have, extraits pour l'étape 5
+  et rubriques indéterminées. L'étape 6 note à partir de ce seul relevé, sans relire le
+  CV. Le relevé ne figure pas dans le PDF.
+- **Ancrage chiffré des quatre paliers pour les quatre critères** (étape 3) : seuls les
+  100 % étaient définis, les paliers 70 / 40 / 0 % étaient laissés à l'interprétation.
+  Chaque palier se calcule désormais à partir des décomptes du relevé (`C`, `n`, `A`,
+  `R`, `P`, `Q`, `E`), avec une valeur par défaut explicite pour les années attendues
+  quand l'offre ne chiffre rien.
+- **Règle d'arrondi** (entier le plus proche, demi-point vers le bas) : sans elle, un
+  même palier produisait deux totaux différents d'une analyse à l'autre.
+- **Ordre de traitement fixe** : les CV sont relevés puis notés par ordre alphabétique
+  du nom de fichier, quel que soit leur ordre de dépôt, pour supprimer l'effet d'ancrage
+  du premier CV lu sur les suivants.
+- **Ordre de priorité de rattachement des signaux de cohérence** (anachronisme > copie
+  littérale > placage de mots-clés > compétence orpheline > volume implausible > écart
+  titre / réalisations) et **seuils chiffrés** pour trois d'entre eux : 3 termes repris
+  pour le placage, 10 mots consécutifs pour la copie littérale, 5 technologies par année
+  d'expérience pour le volume implausible. Liste de dates de diffusion de référence pour
+  l'anachronisme.
+- **Barème de la confiance de l'analyse**, jusque-là non défini : elle se déduit du
+  nombre de rubriques indéterminées du relevé.
+- **Règle de départage à score égal** (stack, puis séniorité, puis complexité, puis ordre
+  alphabétique) et **mention « limite de catégorie »** pour les scores à moins de 3 points
+  d'un seuil, avec revérification des paliers avant de figer la catégorie.
+- Bloc **« Figer le référentiel »** en fin d'étape 3 : must-have, compétences, poids et
+  années attendues restitués dans un bloc réutilisable tel quel lors d'une prochaine
+  analyse du même poste, pour que la variance ne vienne plus des validations
+  successives de l'utilisateur.
+- Ligne **« Méthode »** dans le bloc « Cadre de l'analyse », pour que le rapport dise
+  comment il a été produit.
+
+### Modifié
+
+- Les niveaux du tableau d'appréciation des compétences techniques se lisent désormais
+  directement dans le relevé de l'étape 4 (compétence comptée dans `n`, récence, présence
+  dans un projet compté dans `P`), au lieu d'être réévalués : le tableau et le palier de
+  stack ne peuvent plus diverger.
+- Le frontmatter (`description`) mentionne la notation en deux temps (relevé factuel
+  dénombrable puis barème chiffré) et l'objectif de classement reproductible.
+- Points de vigilance : interdiction de sauter le relevé factuel « pour aller plus
+  vite », et conduite à tenir quand l'utilisateur signale un résultat différent sur un
+  lot déjà analysé (comparer les relevés, corriger le décompte fautif, ne pas retoucher
+  les scores).
+
 ## [1.3.0] - 2026-08-19
 
 ### Ajouté

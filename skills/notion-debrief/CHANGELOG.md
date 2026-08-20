@@ -4,6 +4,14 @@ Toutes les versions notables de ce skill sont documentées ici. Le format
 suit [Keep a Changelog](https://keepachangelog.com/), et le versionnement
 suit [semver](https://semver.org/) (MAJOR.MINOR.PATCH).
 
+## [1.3.1] - 2026-08-20
+
+### Modifié
+
+- Correction du frontmatter : `author: "saumon"` au lieu de
+  `author: "magic-manager-skills"`. Chaque skill porte le nom de son auteur,
+  pas le nom du mono-repo.
+
 ## [1.3.0] - 2026-08-03
 
 ### Modifié
