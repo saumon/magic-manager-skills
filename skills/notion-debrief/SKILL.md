@@ -3,9 +3,9 @@ name: notion-debrief
 description: Résume une page Notion et envoie un débriefing (carte adaptive) à un destinataire via Microsoft Teams. Déclencher ce skill dès que l'utilisateur demande de "résumer une page Notion et l'envoyer à quelqu'un", de "faire un débriefing" à partir de Notion, ou toute variante de "prépare/envoie un résumé de cette page Notion à X". Nécessite les MCP Notion et Kommunicator déjà configurés (lecture Notion + envoi Teams).
 license: MIT
 metadata:
-  version: "1.3.0"
-  author: "magic-manager-skills"
-  last-updated: "2026-08-03"
+  version: "1.3.1"
+  author: "saumon"
+  last-updated: "2026-08-20"
   repository: "https://github.com/saumon/magic-manager-skills"
 ---
 

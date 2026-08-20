@@ -4,6 +4,27 @@ Ce fichier référence les changements structurels du mono-repo (ajout/retrait
 de skills). L'historique détaillé de chaque skill vit dans son propre
 `skills/<nom>/CHANGELOG.md`.
 
+## 2026-08-20
+
+- `notion-debrief` passe en v1.3.1 : correction du frontmatter (`author: "saumon"`
+  au lieu de `author: "magic-manager-skills"`). Voir
+  [skills/notion-debrief/CHANGELOG.md](skills/notion-debrief/CHANGELOG.md).
+- `resume-to-markdown` passe en v1.0.1 : correction du frontmatter
+  (`author: "saumon"` au lieu de `author: "magic-manager-skills"`). Voir
+  [skills/resume-to-markdown/CHANGELOG.md](skills/resume-to-markdown/CHANGELOG.md).
+
+- `resume-shortlist` passe en v1.4.0 : notation rendue reproductible. Un même lot rejoué
+  avec le même référentiel doit désormais rendre les mêmes catégories, le même ordre de
+  classement et des scores à ± 3 points. La lecture des CV est séparée de la notation par
+  un **relevé factuel dénombrable** produit à l'étape 4, les quatre paliers du barème sont
+  chiffrés pour les quatre critères (ils ne l'étaient que pour 100 %), les CV sont traités
+  dans un ordre fixe, et les points laissés à l'appréciation sont désormais réglés :
+  arrondi, départage à score égal, barème de la confiance de l'analyse, priorité de
+  rattachement et seuils chiffrés des signaux de cohérence. Le référentiel validé
+  (must-have, compétences, poids) est restitué en fin d'étape 3 dans un bloc réutilisable
+  tel quel d'une analyse à l'autre. Voir
+  [skills/resume-shortlist/CHANGELOG.md](skills/resume-shortlist/CHANGELOG.md).
+
 ## 2026-08-19
 
 - `resume-shortlist` passe en v1.3.0 : prise en charge des CV au format
