@@ -4,6 +4,19 @@ Toutes les versions notables de ce skill sont documentées ici. Le format
 suit [Keep a Changelog](https://keepachangelog.com/), et le versionnement
 suit [semver](https://semver.org/) (MAJOR.MINOR.PATCH).
 
+## [1.0.2] - 2026-08-20
+
+### Modifié
+
+- Raccourcissement de la description du frontmatter pour améliorer le rendu
+  dans l'interface Claude Desktop. Description réduite de ~900 à ~370 caractères
+  en conservant l'essentiel : formats acceptés, principe du dépouillement,
+  conservation du texte et de l'ordre, nommage du fichier de sortie, et la
+  distinction claire avec le skill `resume-shortlist`.
+- Correction du frontmatter pour compatibilité Claude Desktop : `description`
+  passe en bloc YAML multi-ligne (`>-`) afin d'éviter les erreurs de parsing
+  liées aux `:` dans une valeur non quotée.
+
 ## [1.0.1] - 2026-08-20
 
 ### Modifié

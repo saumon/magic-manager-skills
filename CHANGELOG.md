@@ -4,6 +4,14 @@ Ce fichier référence les changements structurels du mono-repo (ajout/retrait
 de skills). L'historique détaillé de chaque skill vit dans son propre
 `skills/<nom>/CHANGELOG.md`.
 
+## 2026-08-20 (maj)
+
+- `resume-to-markdown` passe en v1.0.2 : raccourcissement de la description
+  du frontmatter pour améliorer le rendu dans Claude Desktop, puis passage en
+  bloc YAML multi-ligne `>-` pour fiabiliser le parsing de `description`.
+  Voir
+  [skills/resume-to-markdown/CHANGELOG.md](skills/resume-to-markdown/CHANGELOG.md).
+
 ## 2026-08-20
 
 - `notion-debrief` passe en v1.3.1 : correction du frontmatter (`author: "saumon"`

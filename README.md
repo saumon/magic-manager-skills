@@ -105,7 +105,7 @@ l'exporter en PDF (marges resserrées et tableau de synthèse sans débordement,
 Voir [`skills/resume-shortlist/SKILL.md`](skills/resume-shortlist/SKILL.md)
 et son [`CHANGELOG.md`](skills/resume-shortlist/CHANGELOG.md).
 
-### resume-to-markdown — v1.0.1
+### resume-to-markdown — v1.0.2
 
 Convertit un CV au format PDF ou Word (`.docx`) en fichier Markdown, par
 **dépouillement de forme** : photo, images, logos, icônes, couleurs, colonnes,
