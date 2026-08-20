@@ -1,9 +1,16 @@
 ---
 name: resume-to-markdown
-description: Convertit un CV au format PDF ou Word (.docx) en un fichier Markdown (.md) en retirant tout ce qui n'est pas du texte — photo, images, logos, icônes, couleurs, colonnes, jauges de compétences — et en conservant l'intégralité du contenu textuel, dans l'ordre exact du document source. Le fichier produit porte exactement le même nom que le fichier source, avec l'extension .md (cv-toto.pdf devient cv-toto.md). Déclencher ce skill dès que l'utilisateur demande de "convertir un CV en markdown", "transformer ce CV en .md", "extraire le texte d'un CV", "nettoyer un CV", "alléger un CV trop lourd en images", "passer un CV en texte brut structuré", ou toute variante de "voici un CV PDF/Word, donne-moi la version markdown". Ne pas déclencher ce skill pour évaluer, noter, comparer ou classer des candidats face à une offre d'emploi : c'est le rôle du skill resume-shortlist. En cas de doute entre les deux, demander à l'utilisateur s'il veut convertir un fichier ou analyser des candidatures.
+description: >-
+  Convertit un CV (PDF ou Word) en Markdown en retirant la mise en forme
+  (photo, images, logos, icones, colonnes, jauges) et en conservant
+  l'integralite du texte dans l'ordre exact du document source. Le fichier
+  produit porte le meme nom que la source, extension .md. Declencher pour
+  "convertir un CV en markdown", "transformer ce CV en .md", "extraire le
+  texte d'un CV", "alleger un CV". Ne pas declencher pour evaluer ou classer
+  des candidats : c'est le role du skill resume-shortlist.
 license: MIT
 metadata:
-  version: "1.0.1"
+  version: "1.0.2"
   author: "saumon"
   last-updated: "2026-08-20"
   repository: "https://github.com/saumon/magic-manager-skills"
