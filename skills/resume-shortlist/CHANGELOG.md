@@ -4,6 +4,61 @@ Toutes les versions notables de ce skill sont documentées ici. Le format
 suit [Keep a Changelog](https://keepachangelog.com/), et le versionnement
 suit [semver](https://semver.org/) (MAJOR.MINOR.PATCH).
 
+## [1.5.0] - 2026-08-20
+
+### Ajouté
+
+- **Ligne de provenance obligatoire** dans le cadre de l'analyse (chat et PDF) :
+  « Analyse produite avec : skill `resume-shortlist` v{version} », la version étant
+  reprise telle quelle du frontmatter. Les barèmes évoluant d'une version à l'autre,
+  deux short lists ne sont comparables à froid que si l'on sait de quel moteur elles
+  sortent.
+- **Pied de rapport PDF** mentionnant le skill, sa version et l'URL du projet
+  <https://saumon.github.io/magic-manager-skills/>. Le PDF circule seul : sans cette
+  mention, un lecteur hors contexte n'a aucun moyen de remonter à la méthode.
+- Intégration du **profil public LinkedIn** dans la restitution de l'analyse (chat et
+  PDF) quand le dossier candidat n'est pas anonymisé :
+  - champ ajouté au relevé factuel de l'étape 4 ;
+  - ligne `LinkedIn` ajoutée aux fiches détaillées et à la section « Candidats
+    écartés ». Le tableau de synthèse **ne porte pas** de colonne dédiée, pour ne pas
+    le surcharger.
+- Recherche LinkedIn publique **automatique** pour les CV non anonymisés quand aucune URL
+  n'est fournie dans le dossier, avec confirmation stricte : un profil n'est rattaché
+  que si **une seule** URL publique plausible est trouvée. Homonymes : `ambigu`.
+  Aucune correspondance plausible : `non trouvé`.
+- **Protocole de requêtes** et **variantes de nom obligatoires** (prénom composé avec ou
+  sans trait d'union, ordre nom / prénom inversé, écriture sans accents, nom d'usage) :
+  un profil facile à trouver à la main ne doit plus ressortir en `non trouvé` faute
+  d'avoir essayé une seule graphie.
+- **Corroboration proportionnée au risque d'homonymie** : 1 élément du CV suffit sur un
+  nom rare sans homonyme visible, 2 restent exigés sur un nom courant. L'exigence
+  uniforme de 2 éléments rejetait des profils publics corrects, dont l'aperçu de
+  recherche n'expose souvent que l'intitulé de poste.
+- Statuts normalisés du champ, jamais vide : `URL document`,
+  `confirmé (lookup auto)`, `non trouvé`, `anonymisé`, `ambigu`,
+  `recherche indisponible` (aucun outil de recherche web dans l'environnement, à ne pas
+  confondre avec `non trouvé`).
+- Bloc méthodologique du cadre enrichi : le profil LinkedIn est un identifiant de
+  contexte, **n'entre ni dans le score, ni dans la catégorie, ni dans la confiance, ni
+  dans l'indice de cohérence**. C'est ce qui préserve la reproductibilité, un résultat de
+  recherche pouvant varier d'un jour à l'autre.
+
+### Modifié
+
+- **Étape 1 sans question de format** : le premier message propose directement de
+  déposer le fichier de l'offre **ou** d'en coller le texte, au lieu de faire choisir le
+  format au préalable. Cet aller-retour coûtait un tour de conversation pour une
+  information que le dépôt ou le collage révèle de lui-même.
+- Formats acceptés pour le fichier de l'offre étendus au-delà du seul PDF : **PDF, Word
+  (`.docx`) et Markdown (`.md`)**, comme pour les CV.
+- Règles de lecture (étape 4) : le profil LinkedIn n'est repris que s'il est
+  explicitement présent dans les documents fournis, ou recherché automatiquement si le CV
+  n'est pas anonymisé ; aucune URL n'est reconstruite ni devinée à partir d'un nom.
+- Règles de mise en page PDF : le tableau de synthèse conserve ses **7 colonnes**, sans
+  colonne `LinkedIn`, largeurs et `<colgroup>` inchangés (verdict à 57 %).
+- Point de vigilance « recherche en ligne » clarifié : l'automatisme ne vaut que pour
+  LinkedIn ; toute autre source externe reste soumise à demande explicite de l'utilisateur.
+
 ## [1.4.0] - 2026-08-20
 
 ### Ajouté

@@ -6,6 +6,19 @@ de skills). L'historique détaillé de chaque skill vit dans son propre
 
 ## 2026-08-20 (maj)
 
+- `resume-shortlist` passe en v1.5.0 : le **profil public LinkedIn** du candidat est
+  désormais repris dans la restitution (chat et PDF) quand le dossier n'est pas
+  anonymisé — champ au relevé factuel, ligne dans les fiches et dans la section des
+  candidats écartés, sans colonne dédiée dans le tableau de synthèse. La recherche
+  LinkedIn publique est automatique pour les CV non anonymisés sans URL fournie, avec
+  confirmation stricte : le lien n'est affiché qu'en cas de correspondance unique ; sinon
+  `ambigu` (homonymes) ou `non trouvé`. Cet élément n'entre jamais dans le score, la
+  catégorie, la confiance ni l'indice de cohérence. L'étape 1 ne demande plus le format
+  de l'offre : elle propose directement de déposer le fichier (PDF, Word ou Markdown) ou
+  d'en coller le texte. La restitution porte désormais le **nom du skill et sa version**
+  (chat et PDF), et le PDF ajoute en pied de rapport l'URL du projet
+  <https://saumon.github.io/magic-manager-skills/>. Voir
+  [skills/resume-shortlist/CHANGELOG.md](skills/resume-shortlist/CHANGELOG.md).
 - `resume-to-markdown` passe en v1.0.2 : raccourcissement de la description
   du frontmatter pour améliorer le rendu dans Claude Desktop, puis passage en
   bloc YAML multi-ligne `>-` pour fiabiliser le parsing de `description`.
