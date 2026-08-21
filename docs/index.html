@@ -572,7 +572,7 @@ footer nav { display: flex; flex-wrap: wrap; gap: 1.5rem; }
         <article class="card skill-card">
           <div class="skill-head">
             <h3>resume-shortlist</h3>
-            <span class="version">v1.4.0</span>
+            <span class="version">v1.5.0</span>
           </div>
           <p>
             Analyse un lot de CV (PDF, Word ou Markdown) face à une offre d'emploi et
@@ -581,8 +581,10 @@ footer nav { display: flex; flex-wrap: wrap; gap: 1.5rem; }
             Chaque candidat reçoit un tableau d'appréciation des compétences techniques
             de l'offre, du hors sujet au bien. La notation passe par un relevé factuel
             dénombrable puis un barème chiffré, pour qu'un même lot rejoué donne le même
-            classement. Détecte les CV alignés artificiellement sur l'offre et exporte le
-            rapport en PDF, tableaux compris.
+            classement. Le profil public LinkedIn est recherché automatiquement pour les
+            CV non anonymisés, et n'est affiché qu'en cas de correspondance unique,
+            sans jamais peser sur le score. Détecte les CV alignés
+            artificiellement sur l'offre et exporte le rapport en PDF, tableaux compris.
           </p>
           <ul class="tags">
             <li>Aucun MCP</li>
