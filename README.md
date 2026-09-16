@@ -5,7 +5,7 @@
 <p align="center">
   <a href="https://saumon.github.io/magic-manager-skills/"><img alt="Landing page" src="https://img.shields.io/badge/landing%20page-en%20ligne-7c8cff?style=flat-square&logo=githubpages&logoColor=white"></a>
   <a href="LICENSE"><img alt="Licence MIT" src="https://img.shields.io/github/license/saumon/magic-manager-skills?style=flat-square&color=4fd1c5"></a>
-  <img alt="Skills disponibles" src="https://img.shields.io/badge/skills-3-7c8cff?style=flat-square">
+  <img alt="Skills disponibles" src="https://img.shields.io/badge/skills-4-7c8cff?style=flat-square">
   <img alt="Claude Skills" src="https://img.shields.io/badge/Claude-Skills-d97757?style=flat-square&logo=anthropic&logoColor=white">
   <img alt="MCP requis" src="https://img.shields.io/badge/MCP-Notion%20%7C%20Kommunicator-4fd1c5?style=flat-square">
   <img alt="Langue : français" src="https://img.shields.io/badge/langue-fran%C3%A7ais-7c8cff?style=flat-square">
@@ -40,6 +40,12 @@ magic-manager-skills/
     │   ├── CHANGELOG.md
     │   └── assets/
     │       └── adaptive_card_template.json
+    ├── notion-meeting-minutes/
+    │   ├── SKILL.md
+    │   ├── CHANGELOG.md
+    │   └── assets/
+    │       ├── email_template.html
+    │       └── minutes.css
     ├── resume-shortlist/
     │   ├── SKILL.md
     │   ├── CHANGELOG.md
@@ -84,6 +90,28 @@ Résume une page Notion et envoie un débriefing (carte adaptive) à un
 destinataire via Microsoft Teams. Nécessite les MCP Notion et Kommunicator.
 Voir [`skills/notion-debrief/SKILL.md`](skills/notion-debrief/SKILL.md) et
 son [`CHANGELOG.md`](skills/notion-debrief/CHANGELOG.md).
+
+### notion-meeting-minutes — v1.0.0
+
+Transforme des notes de réunion — page Notion ou notes collées dans la
+conversation — en **compte rendu structuré** : en bref, sujets traités,
+décisions, actions (action / porteur / échéance), points en suspens, prochaine
+réunion. Le skill commence par relever l'ossature de la réunion (objet, date,
+participants) et **signale explicitement ce qui manque** — action sans porteur,
+échéance absente, point ambigu, désaccord non tranché — plutôt que de le combler
+par une valeur plausible : ce qui manque reste `à préciser`. La séparation entre
+ce qui a été **discuté**, ce qui a été **décidé** et ce qui est **à faire** est
+stricte. Après relecture dans le chat, le format de restitution est demandé à
+l'utilisateur, jamais choisi pour lui : **Markdown**, **PDF** (feuille de style
+`assets/minutes.css`, marges resserrées et tableau des actions sans débordement)
+ou **HTML**. Le HTML est conçu pour être **copié-collé dans le corps d'un email
+Outlook** : tableaux imbriqués de largeur fixe (640 px), styles entièrement
+inline — le `<head>` ne survit pas au presse-papier —, aucune propriété ignorée
+par le moteur de rendu de Word (flex, grid, media queries, `max-width`) et
+**aucune barre de défilement horizontale** à l'ouverture du mail. Le skill ne
+diffuse rien lui-même : la main reste à l'utilisateur.
+Voir [`skills/notion-meeting-minutes/SKILL.md`](skills/notion-meeting-minutes/SKILL.md)
+et son [`CHANGELOG.md`](skills/notion-meeting-minutes/CHANGELOG.md).
 
 ### resume-shortlist — v1.5.0
 

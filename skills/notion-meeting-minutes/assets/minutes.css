@@ -1,0 +1,166 @@
+/* Feuille de style de l'export PDF du skill notion-meeting-minutes.
+   Objectifs : marges resserrées, tableau des actions intégralement visible
+   (aucun débordement horizontal, aucune barre de défilement), titres non
+   numérotés, et ruptures de page qui ne coupent ni une action ni un titre de
+   sa section. */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm;
+}
+
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+}
+
+/* La plupart des convertisseurs enveloppent le contenu dans un conteneur à
+   `max-width` et gros padding (thèmes type github-markdown-css) : ce padding
+   s'ajoute aux marges de @page et le compte rendu se retrouve tassé. */
+.markdown-body, .markdown-preview, .container, .content, .page,
+#content, #write, main, article {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "DejaVu Sans", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11pt;
+  line-height: 1.5;
+  color: #1a1a1a;
+}
+
+h1 {
+  font-size: 19pt;
+  margin: 0 0 3mm;
+  color: #111827;
+}
+
+h2 {
+  font-size: 14pt;
+  margin: 8mm 0 2.5mm;
+  color: #111827;
+  border-bottom: 0.8pt solid #d5d9e0;
+  padding-bottom: 1.2mm;
+  page-break-after: avoid;
+}
+
+h3 {
+  font-size: 12pt;
+  margin: 5mm 0 1.5mm;
+  color: #1f3a8a;
+  page-break-after: avoid;
+}
+
+/* Les titres ne sont jamais numérotés automatiquement. */
+body { counter-reset: none; }
+h1::before, h2::before, h3::before, h4::before { content: none; }
+
+p, ul, ol { margin: 0 0 2.5mm; }
+ul, ol { padding-left: 5mm; }
+li { margin-bottom: 1.2mm; }
+
+/* Bloc d'en-tête : les trois lignes date / participants / excusés, écrites en
+   Markdown juste sous le titre. */
+h1 + p {
+  background: #f3f4f6;
+  padding: 2.5mm 3mm;
+  margin-bottom: 4mm;
+  font-size: 10pt;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+hr {
+  border: 0;
+  border-top: 0.6pt solid #b4bac6;
+  margin: 5mm 0 4mm;
+}
+
+/* --- Tableau des actions ------------------------------------------------- */
+
+table {
+  width: 100% !important;
+  max-width: 100%;
+  table-layout: fixed !important;   /* sans ceci, le moteur répartit les colonnes par contenu */
+  border-collapse: collapse;
+  margin: 1mm 0 4mm;
+  font-size: 9.5pt;
+  page-break-inside: auto;
+}
+
+/* Neutralise les conteneurs défilants ajoutés par les thèmes Markdown :
+   en PDF, une zone scrollable devient du texte tronqué. */
+table, thead, tbody, tr, th, td,
+.markdown-body table,
+div:has(> table) {
+  overflow: visible;
+  overflow-x: visible;
+}
+
+th, td {
+  border: 0.4pt solid #c8ccd4;
+  padding: 1.5mm 2mm;
+  text-align: left;
+  vertical-align: top;
+  white-space: normal;        /* jamais de nowrap : la cellule doit se replier */
+  overflow-wrap: anywhere;    /* coupe les noms et références longs */
+  word-break: break-word;
+  hyphens: auto;
+}
+
+th {
+  background: #eef1f6;
+  font-weight: 600;
+  color: #111827;
+}
+
+thead { display: table-header-group; }  /* en-tête répété sur chaque page */
+tr { page-break-inside: avoid; }
+
+/* Largeurs des 3 colonnes du tableau des actions : Action · Porteur · Échéance.
+   !important : beaucoup de thèmes Markdown posent leurs propres largeurs.
+   Un <colgroup> dans le HTML intermédiaire porte les mêmes valeurs, pour les
+   convertisseurs qui ignorent nth-child. */
+table th:nth-child(1), table td:nth-child(1) { width: 58% !important; }
+table th:nth-child(2), table td:nth-child(2) { width: 21% !important; }
+table th:nth-child(3), table td:nth-child(3) { width: 21% !important; }
+
+table colgroup col:nth-child(1) { width: 58%; }
+table colgroup col:nth-child(2) { width: 21%; }
+table colgroup col:nth-child(3) { width: 21%; }
+
+/* --- Divers -------------------------------------------------------------- */
+
+strong { color: #111827; }
+
+code {
+  font-family: "DejaVu Sans Mono", Consolas, monospace;
+  font-size: 9.5pt;
+  background: #f3f4f6;
+  padding: 0 0.8mm;
+}
+
+/* Aucun bloc préformaté ne doit déborder de la page. */
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 9pt;
+  background: #f3f4f6;
+  padding: 2mm;
+  border: 0.4pt solid #d5d9e0;
+}
+
+blockquote {
+  margin: 0 0 2.5mm;
+  padding: 0 0 0 3mm;
+  border-left: 1pt solid #c8ccd4;
+  color: #4b5563;
+}
+
+a { color: #1f3a8a; overflow-wrap: anywhere; }

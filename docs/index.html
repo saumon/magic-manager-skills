@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>magic-manager-skills — Des skills Claude pour Engineering Managers</title>
-<meta name="description" content="Mono-repo open source de skills Claude pour l'automatisation de tâches de management : débriefing Notion vers Teams, tri de CV, conversion de CV en Markdown. Pensé pour une stack Microsoft Teams (MCP Kommunicator) et Notion.">
+<meta name="description" content="Mono-repo open source de skills Claude pour l'automatisation de tâches de management : débriefing Notion vers Teams, compte rendu de réunion en Markdown, PDF ou HTML pour Outlook, tri de CV, conversion de CV en Markdown. Pensé pour une stack Microsoft Teams (MCP Kommunicator) et Notion.">
 <meta name="theme-color" content="#0b0e14">
 <meta name="color-scheme" content="dark">
 <meta property="og:type" content="website">
 <meta property="og:title" content="magic-manager-skills — Des skills Claude pour Engineering Managers">
-<meta property="og:description" content="Des workflows de management transformés en skills Claude versionnés : débriefing Notion vers Teams, tri de CV, conversion de CV en Markdown. Open source, licence MIT.">
+<meta property="og:description" content="Des workflows de management transformés en skills Claude versionnés : débriefing Notion vers Teams, compte rendu de réunion prêt pour Outlook, tri de CV, conversion de CV en Markdown. Open source, licence MIT.">
 <meta property="og:url" content="https://saumon.github.io/magic-manager-skills/">
 <meta property="og:image" content="https://saumon.github.io/magic-manager-skills/assets/images/magicmanagerskills-logo.png">
 <meta property="og:image:alt" content="Logo magic-manager-skills : un magicien à lunettes, baguette dans une main et ordinateur portable dans l'autre">
@@ -414,7 +414,7 @@ footer nav { display: flex; flex-wrap: wrap; gap: 1.5rem; }
           skills Claude versionnés, réutilisables et partageables.
         </p>
         <ul class="badges">
-          <li>3 skills</li>
+          <li>4 skills</li>
           <li>MCP Notion</li>
           <li>MCP Kommunicator</li>
           <li>100 % français</li>
@@ -542,7 +542,7 @@ footer nav { display: flex; flex-wrap: wrap; gap: 1.5rem; }
   <section id="skills" class="reveal">
     <div class="wrap">
       <p class="section-tag">Skills disponibles</p>
-      <h2>Trois workflows prêts à l'emploi</h2>
+      <h2>Quatre workflows prêts à l'emploi</h2>
       <p class="lead">
         Chaque skill vit dans son propre dossier sous <code>skills/</code>, avec son
         <code>SKILL.md</code>, son changelog et ses éventuelles ressources.
@@ -567,6 +567,33 @@ footer nav { display: flex; flex-wrap: wrap; gap: 1.5rem; }
           <div class="card-links">
             <a href="https://github.com/saumon/magic-manager-skills/blob/dev/skills/notion-debrief/SKILL.md" target="_blank" rel="noopener noreferrer">SKILL.md ↗</a>
             <a href="https://github.com/saumon/magic-manager-skills/blob/dev/skills/notion-debrief/CHANGELOG.md" target="_blank" rel="noopener noreferrer">Changelog ↗</a>
+          </div>
+        </article>
+        <article class="card skill-card">
+          <div class="skill-head">
+            <h3>notion-meeting-minutes</h3>
+            <span class="version">v1.0.0</span>
+          </div>
+          <p>
+            Transforme des notes de réunion — page Notion ou notes collées dans la
+            conversation — en compte rendu structuré : en bref, sujets traités,
+            décisions, actions avec porteur et échéance, points en suspens. Ce qui
+            manque est signalé, jamais inventé : une action sans porteur reste
+            <code>à préciser</code>. Le format de restitution est demandé après relecture —
+            Markdown, PDF ou HTML. Le HTML est calibré pour le copier-coller dans un
+            email Outlook : tableaux de largeur fixe, styles inline, et aucune barre de
+            défilement horizontale à l'ouverture du mail.
+          </p>
+          <ul class="tags">
+            <li>Notion</li>
+            <li>Compte rendu</li>
+            <li>Outlook</li>
+            <li>PDF</li>
+            <li>HTML</li>
+          </ul>
+          <div class="card-links">
+            <a href="https://github.com/saumon/magic-manager-skills/blob/dev/skills/notion-meeting-minutes/SKILL.md" target="_blank" rel="noopener noreferrer">SKILL.md ↗</a>
+            <a href="https://github.com/saumon/magic-manager-skills/blob/dev/skills/notion-meeting-minutes/CHANGELOG.md" target="_blank" rel="noopener noreferrer">Changelog ↗</a>
           </div>
         </article>
         <article class="card skill-card">
