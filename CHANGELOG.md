@@ -4,6 +4,23 @@ Ce fichier référence les changements structurels du mono-repo (ajout/retrait
 de skills). L'historique détaillé de chaque skill vit dans son propre
 `skills/<nom>/CHANGELOG.md`.
 
+## 2026-09-16
+
+- Ajout du skill `notion-meeting-minutes` v1.0.0 : production d'un compte rendu de
+  réunion structuré (en bref, sujets traités, décisions, actions avec porteur et
+  échéance, points en suspens, prochaine réunion) à partir de notes prises dans une
+  page Notion ou collées dans la conversation. Le skill relève d'abord l'ossature de
+  la réunion et signale ce qui manque — action sans porteur, échéance absente, point
+  ambigu — plutôt que de le combler : ce qui manque reste `à préciser`. Après
+  relecture dans le chat, le format de restitution est demandé à l'utilisateur :
+  Markdown, PDF (feuille de style `assets/minutes.css`) ou HTML destiné au
+  **copier-coller dans un email Outlook** — gabarit `assets/email_template.html` en
+  tableaux imbriqués de largeur fixe (640 px), styles entièrement inline, aucune
+  propriété CSS ignorée par le moteur de rendu de Word, et **aucune barre de
+  défilement horizontale** à l'ouverture du mail. Le skill ne diffuse rien lui-même :
+  les envois Teams restent du ressort de `notion-debrief`. Voir
+  [skills/notion-meeting-minutes/CHANGELOG.md](skills/notion-meeting-minutes/CHANGELOG.md).
+
 ## 2026-08-20 (maj)
 
 - `resume-shortlist` passe en v1.5.0 : le **profil public LinkedIn** du candidat est
