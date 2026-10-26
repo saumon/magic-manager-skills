@@ -4,6 +4,46 @@ Ce fichier référence les changements structurels du mono-repo (ajout/retrait
 de skills). L'historique détaillé de chaque skill vit dans son propre
 `skills/<nom>/CHANGELOG.md`.
 
+## 2026-10-26 (maj)
+
+- README et landing page : procédure d'import d'un skill mise à jour pour la
+  nouvelle interface de Claude (**Paramètres → Personnalisation → Skills**, puis
+  **Ajouter → Importer un skill**), en remplacement de « Compétences → Gérer les
+  compétences ».
+- `mm-reports-signature` passe en v1.1.1 : le PDF signé d'une pièce jointe reprend
+  désormais le **nom d'origine** du document (`Astreinte M BOUROGAA 10-26 - signé.pdf`)
+  et non le nom donné par l'upload (`dd51ede5-Astreinte_M_BOUROGAA_10-26 - signé.pdf`).
+  Nouvelle option `--original-name`, vérifiée contre le fichier renommé pour éviter
+  toute inversion dans un lot. Voir
+  [skills/mm-reports-signature/CHANGELOG.md](skills/mm-reports-signature/CHANGELOG.md).
+- `mm-reports-signature` passe en v1.1.0 : le nom et la signature ne sont plus
+  redemandés à chaque nouvelle conversation sur Claude Desktop et Claude.ai, où le
+  script tourne dans un environnement isolé recréé à chaque conversation. Le premier
+  lancement produit désormais un **zip personnel** du skill embarquant la
+  configuration (`config/`), à réimporter une fois ; la configuration utilisateur
+  `~/.config/…` reste lue en priorité. Nouvelle sous-commande `config bundle`, et
+  `skills/*/config/` ajouté au `.gitignore` pour ne jamais committer une signature.
+  Voir
+  [skills/mm-reports-signature/CHANGELOG.md](skills/mm-reports-signature/CHANGELOG.md).
+
+## 2026-10-26
+
+- Ajout du skill `mm-reports-signature` v1.0.0 : signature des notes de frais et
+  comptes rendus d'astreintes PDF envoyés par les prestataires — Prénom NOM, date
+  du jour et image de signature apposés dans la zone de visa client / responsable,
+  en rendu aplati dans la page. Nom et PNG de signature demandés au premier
+  lancement puis enregistrés hors du dépôt, dans
+  `~/.config/magic-manager-skills/mm-reports-signature/`. Détection automatique de
+  trois modèles (note de frais STIME « Visa Client », compte-rendu d'astreintes,
+  annexe au rapport d'activité STIME) par le script `scripts/sign_reports.py`
+  (PyMuPDF) ; un modèle inconnu donne lieu à un emplacement proposé sur aperçu et
+  validé par l'utilisateur. Contrôles avant signature : signature prestataire
+  absente (alerte), nom pré-rempli différent (confirmation requise), document déjà
+  signé (pas de re-signature). Date pré-remplie conservée, PDF source jamais
+  modifié, copie suffixée ` - signé.pdf`. Voir
+  [skills/mm-reports-signature/CHANGELOG.md](skills/mm-reports-signature/CHANGELOG.md).
+- Landing page et README : passage à cinq skills.
+
 ## 2026-09-16
 
 - Ajout du skill `notion-meeting-minutes` v1.0.0 : production d'un compte rendu de

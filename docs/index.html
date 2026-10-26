@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>magic-manager-skills — Des skills Claude pour Engineering Managers</title>
-<meta name="description" content="Mono-repo open source de skills Claude pour l'automatisation de tâches de management : débriefing Notion vers Teams, compte rendu de réunion en Markdown, PDF ou HTML pour Outlook, tri de CV, conversion de CV en Markdown. Pensé pour une stack Microsoft Teams (MCP Kommunicator) et Notion.">
+<meta name="description" content="Mono-repo open source de skills Claude pour l'automatisation de tâches de management : débriefing Notion vers Teams, compte rendu de réunion en Markdown, PDF ou HTML pour Outlook, tri de CV, conversion de CV en Markdown, signature des notes de frais et astreintes des prestataires. Pensé pour une stack Microsoft Teams (MCP Kommunicator) et Notion.">
 <meta name="theme-color" content="#0b0e14">
 <meta name="color-scheme" content="dark">
 <meta property="og:type" content="website">
 <meta property="og:title" content="magic-manager-skills — Des skills Claude pour Engineering Managers">
-<meta property="og:description" content="Des workflows de management transformés en skills Claude versionnés : débriefing Notion vers Teams, compte rendu de réunion prêt pour Outlook, tri de CV, conversion de CV en Markdown. Open source, licence MIT.">
+<meta property="og:description" content="Des workflows de management transformés en skills Claude versionnés : débriefing Notion vers Teams, compte rendu de réunion prêt pour Outlook, tri de CV, conversion de CV en Markdown, signature des notes de frais. Open source, licence MIT.">
 <meta property="og:url" content="https://saumon.github.io/magic-manager-skills/">
 <meta property="og:image" content="https://saumon.github.io/magic-manager-skills/assets/images/magicmanagerskills-logo.png">
 <meta property="og:image:alt" content="Logo magic-manager-skills : un magicien à lunettes, baguette dans une main et ordinateur portable dans l'autre">
@@ -410,11 +410,12 @@ footer nav { display: flex; flex-wrap: wrap; gap: 1.5rem; }
         <h1>Des skills Claude pour <span class="gradient">Engineering Managers</span></h1>
         <p class="lead">
           Mon métier est plein de rituels qui se répètent : débriefer une page Notion,
-          trier des candidatures, informer une équipe. Ce mono-repo les transforme en
+          trier des candidatures, informer une équipe, signer les notes de frais du
+          mois. Ce mono-repo les transforme en
           skills Claude versionnés, réutilisables et partageables.
         </p>
         <ul class="badges">
-          <li>4 skills</li>
+          <li>5 skills</li>
           <li>MCP Notion</li>
           <li>MCP Kommunicator</li>
           <li>100 % français</li>
@@ -542,12 +543,41 @@ footer nav { display: flex; flex-wrap: wrap; gap: 1.5rem; }
   <section id="skills" class="reveal">
     <div class="wrap">
       <p class="section-tag">Skills disponibles</p>
-      <h2>Quatre workflows prêts à l'emploi</h2>
+      <h2>Cinq workflows prêts à l'emploi</h2>
       <p class="lead">
         Chaque skill vit dans son propre dossier sous <code>skills/</code>, avec son
         <code>SKILL.md</code>, son changelog et ses éventuelles ressources.
       </p>
       <div class="grid">
+        <article class="card skill-card">
+          <div class="skill-head">
+            <h3>mm-reports-signature</h3>
+            <span class="version">v1.1.1</span>
+          </div>
+          <p>
+            Signe en lot les notes de frais et comptes rendus d'astreintes PDF envoyés
+            chaque mois par les prestataires : Prénom NOM, date du jour et image de
+            signature sont gravés dans la zone de visa client ou responsable. Le nom et
+            le PNG de signature sont demandés une seule fois, puis embarqués dans un zip
+            personnel du skill à réimporter : ils survivent ainsi d'une conversation à
+            l'autre, même sur Claude Desktop. Les
+            modèles connus sont repérés automatiquement ; une date déjà pré-remplie est
+            conservée, un nom différent exige une confirmation et un document déjà signé
+            n'est jamais re-signé. Le PDF source reste intact : la copie signée est
+            suffixée <code>- signé.pdf</code>.
+          </p>
+          <ul class="tags">
+            <li>Aucun MCP</li>
+            <li>PDF</li>
+            <li>Python</li>
+            <li>Notes de frais</li>
+            <li>Astreintes</li>
+          </ul>
+          <div class="card-links">
+            <a href="https://github.com/saumon/magic-manager-skills/blob/dev/skills/mm-reports-signature/SKILL.md" target="_blank" rel="noopener noreferrer">SKILL.md ↗</a>
+            <a href="https://github.com/saumon/magic-manager-skills/blob/dev/skills/mm-reports-signature/CHANGELOG.md" target="_blank" rel="noopener noreferrer">Changelog ↗</a>
+          </div>
+        </article>
         <article class="card skill-card">
           <div class="skill-head">
             <h3>notion-debrief</h3>
@@ -674,8 +704,11 @@ cd magic-manager-skills</code></pre>
         <article class="step">
           <h3>Importer dans Claude</h3>
           <p>
-            Dans l'application, aller dans <strong>Compétences → Gérer les compétences</strong>
-            et importer le <code>.zip</code>. Sur Claude.ai ou Cowork, copier le contenu
+            Dans l'application, ouvrir <strong>Paramètres</strong>, puis
+            <strong>Personnalisation → Skills</strong>. Dans l'écran de gestion des
+            skills, cliquer sur <strong>Ajouter</strong>, puis sur
+            <strong>Importer un skill</strong>, et sélectionner le <code>.zip</code>.
+            Sur Claude.ai ou Cowork, copier le contenu
             du dossier dans l'emplacement de skills correspondant.
           </p>
         </article>

@@ -5,7 +5,7 @@
 <p align="center">
   <a href="https://saumon.github.io/magic-manager-skills/"><img alt="Landing page" src="https://img.shields.io/badge/landing%20page-en%20ligne-7c8cff?style=flat-square&logo=githubpages&logoColor=white"></a>
   <a href="LICENSE"><img alt="Licence MIT" src="https://img.shields.io/github/license/saumon/magic-manager-skills?style=flat-square&color=4fd1c5"></a>
-  <img alt="Skills disponibles" src="https://img.shields.io/badge/skills-4-7c8cff?style=flat-square">
+  <img alt="Skills disponibles" src="https://img.shields.io/badge/skills-5-7c8cff?style=flat-square">
   <img alt="Claude Skills" src="https://img.shields.io/badge/Claude-Skills-d97757?style=flat-square&logo=anthropic&logoColor=white">
   <img alt="MCP requis" src="https://img.shields.io/badge/MCP-Notion%20%7C%20Kommunicator-4fd1c5?style=flat-square">
   <img alt="Langue : français" src="https://img.shields.io/badge/langue-fran%C3%A7ais-7c8cff?style=flat-square">
@@ -35,6 +35,11 @@ magic-manager-skills/
 │       └── images/
 │           └── magicmanagerskills-logo.png
 └── skills/
+    ├── mm-reports-signature/
+    │   ├── SKILL.md
+    │   ├── CHANGELOG.md
+    │   └── scripts/
+    │       └── sign_reports.py
     ├── notion-debrief/
     │   ├── SKILL.md
     │   ├── CHANGELOG.md
@@ -71,8 +76,9 @@ Chaque skill vit dans son propre sous-dossier sous `skills/`, avec son
    cd skills && zip -r notion-debrief.zip notion-debrief
    ```
 
-2. Dans Claude, aller dans **Compétences → Gérer les compétences**, puis
-   ajouter le skill en important le `.zip` généré.
+2. Dans Claude, ouvrir **Paramètres**, puis **Personnalisation → Skills**.
+3. Dans l'écran de gestion des skills, cliquer sur **Ajouter**, puis sur
+   **Importer un skill**, et sélectionner le `.zip` généré.
 
 Les archives `*.zip` produites dans `skills/` sont ignorées par Git.
 
@@ -83,6 +89,30 @@ Claude (`/mnt/skills/user/` sur Claude.ai, ou l'équivalent Cowork), ou
 importer le fichier `.skill` packagé directement depuis l'interface Claude.
 
 ## Skills disponibles
+
+### mm-reports-signature — v1.1.1
+
+Signe les **notes de frais** et **comptes rendus d'astreintes** PDF envoyés chaque
+mois par les prestataires : **Prénom NOM**, **date du jour** (`JJ/MM/AAAA`) et
+**image de signature** sont apposés dans la zone de visa client / responsable, en
+rendu aplati dans la page (ni annotation ni tampon déplaçable). Au **premier
+lancement**, le skill demande le nom et le PNG de signature, les enregistre dans
+`~/.config/magic-manager-skills/mm-reports-signature/` et produit un **zip
+personnel** du skill qui les embarque (`config/`) : une fois ce zip réimporté, ils
+ne sont plus redemandés, y compris sur Claude Desktop et Claude.ai où
+l'environnement d'exécution est recréé à chaque conversation. Ce zip contient la
+signature : il ne se partage pas, et `skills/*/config/` est ignoré par Git. Trois modèles sont reconnus automatiquement — note de
+frais STIME (« Visa Client »), compte-rendu d'astreintes (« Signature du
+responsable hiérarchique ») et annexe au rapport d'activité STIME — et un modèle
+inconnu donne lieu à un emplacement proposé sur aperçu, à valider. Avant de
+signer, le skill alerte sur une signature prestataire absente, demande
+confirmation si le nom pré-rempli n'est pas le vôtre et refuse de re-signer un
+document déjà visé ; une date déjà pré-remplie est conservée. Le PDF source n'est
+jamais modifié : la copie signée reprend le nom d'origine du document — y compris
+pour une pièce jointe, que l'upload renomme — suffixé de ` - signé.pdf`. Traitement par le
+script `scripts/sign_reports.py` (Python, PyMuPDF). Aucun MCP requis.
+Voir [`skills/mm-reports-signature/SKILL.md`](skills/mm-reports-signature/SKILL.md)
+et son [`CHANGELOG.md`](skills/mm-reports-signature/CHANGELOG.md).
 
 ### notion-debrief — v1.3.1
 
