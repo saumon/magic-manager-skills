@@ -90,7 +90,7 @@ importer le fichier `.skill` packagé directement depuis l'interface Claude.
 
 ## Skills disponibles
 
-### mm-reports-signature — v1.1.1
+### mm-reports-signature — v1.1.2
 
 Signe les **notes de frais** et **comptes rendus d'astreintes** PDF envoyés chaque
 mois par les prestataires : **Prénom NOM**, **date du jour** (`JJ/MM/AAAA`) et

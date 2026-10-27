@@ -4,6 +4,13 @@ Ce fichier référence les changements structurels du mono-repo (ajout/retrait
 de skills). L'historique détaillé de chaque skill vit dans son propre
 `skills/<nom>/CHANGELOG.md`.
 
+## 2026-10-27
+
+- `mm-reports-signature` passe en v1.1.2 : le nom d'origine d'une pièce jointe
+  n'est plus demandé avant de signer, le nom le plus probable est retenu par
+  défaut. Voir
+  [skills/mm-reports-signature/CHANGELOG.md](skills/mm-reports-signature/CHANGELOG.md).
+
 ## 2026-10-26 (maj)
 
 - README et landing page : procédure d'import d'un skill mise à jour pour la
