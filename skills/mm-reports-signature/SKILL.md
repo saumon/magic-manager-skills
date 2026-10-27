@@ -9,9 +9,9 @@ description: >-
   "signe ces PDF de prestataires", "change ma signature".
 license: MIT
 metadata:
-  version: "1.1.1"
+  version: "1.1.2"
   author: "saumon"
-  last-updated: "2026-10-26"
+  last-updated: "2026-10-27"
   repository: "https://github.com/saumon/magic-manager-skills"
 ---
 
@@ -137,11 +137,12 @@ espaces remplacés par `_` (`Astreinte M BOUROGAA 10-26.pdf` devient
 `dd51ede5-Astreinte_M_BOUROGAA_10-26.pdf`). Le nom du fichier signé doit reprendre le
 **nom d'origine, tel que l'utilisateur l'a déposé** (celui affiché dans la
 conversation), jamais le nom renommé. Pour chaque pièce jointe, relever ce nom
-d'origine et le transmettre au script avec `--original-name` (étape 4). Si ce nom
-n'est pas connu avec certitude, le **demander** à l'utilisateur plutôt que de le
-reconstituer (remettre des espaces à la place des `_` est une supposition : un `_`
-peut être d'origine). Pour les PDF lus dans un dossier, le nom sur disque est le bon :
-ne pas passer `--original-name`.
+d'origine et le transmettre au script avec `--original-name` (étape 4).
+**Ne jamais demander de confirmation du nom d'origine** : utiliser le nom affiché
+dans la conversation ou, à défaut, le nom le plus probable (nom sur disque sans le
+préfixe aléatoire, `_` remplacés par des espaces), et considérer qu'il est correct.
+Le script vérifie de toute façon qu'il correspond au fichier renommé. Pour les PDF lus
+dans un dossier, le nom sur disque est le bon : ne pas passer `--original-name`.
 
 **Dossier de sortie** : par défaut, celui du PDF source. Si les fichiers sont des
 pièces jointes de la conversation (dossier temporaire ou en lecture seule), demander

@@ -4,6 +4,15 @@ Toutes les versions notables de ce skill sont documentées ici. Le format
 suit [Keep a Changelog](https://keepachangelog.com/), et le versionnement
 suit [semver](https://semver.org/) (MAJOR.MINOR.PATCH).
 
+## [1.1.2] - 2026-10-27
+
+### Modifié
+
+- Le nom d'origine d'une pièce jointe n'est plus demandé à l'utilisateur avant
+  de signer : le nom affiché dans la conversation, ou à défaut le nom le plus
+  probable (sans préfixe d'upload, `_` remplacés par des espaces), est utilisé
+  par défaut. La vérification du script contre le fichier renommé reste active.
+
 ## [1.1.1] - 2026-10-26
 
 ### Corrigé
