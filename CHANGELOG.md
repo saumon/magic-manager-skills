@@ -4,6 +4,20 @@ Ce fichier référence les changements structurels du mono-repo (ajout/retrait
 de skills). L'historique détaillé de chaque skill vit dans son propre
 `skills/<nom>/CHANGELOG.md`.
 
+## 2026-11-18 (maj)
+
+- Refonte de la landing page [`docs/index.html`](docs/index.html), thème et logo
+  conservés. La grille de cartes identiques laisse place à une scène interactive : on
+  choisit un skill et la page montre ce qu'il reçoit et ce qu'il rend (note de frais
+  signée, page Notion devenue carte Teams, notes devenues compte rendu, CV classés,
+  CV allégé en Markdown). Police unique Recursive, hébergée dans `docs/assets/fonts/`
+  avec le texte de sa licence OFL pour garder la page sans dépendance externe : ses axes font
+  passer les titres du style « code » au style « magie » au passage d'une baguette
+  dorée. Ciel étoilé en parallaxe avec étoiles filantes, logo en lévitation,
+  étincelles au curseur et au clic. Toute animation s'arrête quand le système demande
+  moins de mouvement ; aucun défilement horizontal sur mobile.
+- `CLAUDE.md` : la section « Vitrine landing page » décrit la nouvelle structure.
+
 ## 2026-11-18
 
 - Ajout de [`CLAUDE.md`](CLAUDE.md) : conventions de création et de

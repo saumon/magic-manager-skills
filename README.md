@@ -33,6 +33,9 @@ magic-manager-skills/
 │   ├── index.html
 │   ├── .nojekyll
 │   └── assets/
+│       ├── fonts/
+│       │   ├── OFL.txt
+│       │   └── recursive-latin.woff2
 │       └── images/
 │           └── magicmanagerskills-logo.png
 └── skills/
