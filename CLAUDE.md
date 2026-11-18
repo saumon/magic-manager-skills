@@ -38,18 +38,28 @@ landing) égale `ls skills | wc -l`.
 ### Vitrine landing page
 
 - `<meta name="description">` et `og:description` : ils listent les skills par leur usage.
-- Badge du hero `<li>N skills</li>` et titre de la section `#skills`, où le nombre est
-  écrit en toutes lettres (« Cinq workflows prêts à l'emploi »).
-- Une `<article class="card skill-card">` par skill, par ordre alphabétique : `h3` avec
-  le nom, `span.version`, paragraphe, `ul.tags` (premier tag : le ou les MCP requis, ou
-  « Aucun MCP »), liens `blob/dev/skills/<nom>/SKILL.md` et `CHANGELOG.md`.
-- Le terminal de démonstration du hero cite `notion-debrief` et sa version : il suit les
-  versions de ce skill.
-- Le paragraphe d'accroche du hero : enrichi quand le skill ouvre une nouvelle famille
-  d'usage.
+- Le nombre de skills, écrit en toutes lettres : bouton du hero (« Voir les cinq
+  skills ») et titre de la section `#skills` (« Cinq tours, et ce qu'ils transforment »).
+- La scène `.stage` de la section `#skills` présente chaque skill, par ordre alphabétique,
+  en deux éléments reliés par `aria-controls` / `aria-labelledby` :
+  - un onglet `button[role="tab"]` dans `.rituals` : `.r-name` (le nom) et `.r-what`
+    (l'usage en quelques mots). Seul le premier porte `aria-selected="true"`, les autres
+    ont `tabindex="-1"` ;
+  - un panneau `div.panel[role="tabpanel"]`, `hidden` sauf le premier. Sa `.trick` montre
+    ce que le skill reçoit (`.before`) et ce qu'il rend (`.after`), en maquettes HTML et
+    CSS (`.doc` avec `.paper`, `.dark`, `.card`…) aux contenus fictifs. Les éléments de
+    `.after` qui apparaissent en cascade portent `class="m" style="--i:N"`. Sa
+    `.panel-text` contient la description, `.needs` (le ou les MCP requis, ou « Aucun MCP
+    requis ») et `.panel-links` : `span.ver` avec la version, puis les liens
+    `blob/dev/skills/<nom>/SKILL.md` et `CHANGELOG.md`.
+- L'accroche du hero cite les rituels automatisés : elle s'enrichit quand le skill ouvre
+  une nouvelle famille d'usage.
 
-La page reste autonome : HTML, CSS et JS inline, aucune dépendance externe, aucun
-défilement horizontal à 375 px. Réutiliser les classes et les variables CSS existantes.
+La page reste autonome : HTML, CSS et JS inline. Sa seule ressource hors du fichier est
+la police `assets/fonts/recursive-latin.woff2`, hébergée dans le dépôt ; aucun CDN.
+Aucun défilement horizontal à 375 px : un décor qui déborde (étincelles, traînées) vit
+dans `main`, qui le rogne. Toute animation s'arrête avec `prefers-reduced-motion`.
+Réutiliser les classes et les variables CSS existantes.
 
 ## Anatomie d'un skill
 
