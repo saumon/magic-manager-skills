@@ -25,6 +25,7 @@ le dossier `/docs` de la branche `dev`).
 ```text
 magic-manager-skills/
 ├── README.md
+├── CLAUDE.md
 ├── CHANGELOG.md
 ├── LICENSE
 ├── .gitignore
@@ -202,9 +203,7 @@ git push origin notion-debrief-v1.1.0
 
 ## Ajouter un nouveau skill
 
-1. Créer `skills/<nom-du-skill>/SKILL.md` (frontmatter `name` + `description`,
-   puis le corps du workflow).
-2. Ajouter les ressources nécessaires dans un sous-dossier `assets/`,
-   `references/` ou `scripts/` si besoin.
-3. Documenter le skill dans la section "Skills disponibles" de ce README.
-4. Committer avec un message clair (`git commit -m "Ajoute skill <nom>"`).
+Les conventions de création et de modification d'un skill (anatomie,
+frontmatter, garde-fous, versionnement, mise à jour du README et de la landing
+page, commits) sont centralisées dans [`CLAUDE.md`](CLAUDE.md), qui sert aussi
+de consigne à Claude lorsqu'il travaille sur ce dépôt.
