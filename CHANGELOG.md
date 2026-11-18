@@ -4,6 +4,16 @@ Ce fichier référence les changements structurels du mono-repo (ajout/retrait
 de skills). L'historique détaillé de chaque skill vit dans son propre
 `skills/<nom>/CHANGELOG.md`.
 
+## 2026-11-18
+
+- Ajout de [`CLAUDE.md`](CLAUDE.md) : conventions de création et de
+  modification d'un skill (anatomie, frontmatter, garde-fous communs,
+  versionnement, Git) et liste de ce qu'un changement de skill doit mettre à
+  jour, README et landing page compris. La section « Ajouter un nouveau skill »
+  du README, devenue incomplète, renvoie désormais à ce fichier.
+- Correction de la landing page : le terminal de démonstration annonçait
+  encore `notion-debrief` en v1.3.0 alors que le skill est en v1.3.1.
+
 ## 2026-10-27
 
 - `mm-reports-signature` passe en v1.1.2 : le nom d'origine d'une pièce jointe
